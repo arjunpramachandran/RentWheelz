@@ -6,7 +6,10 @@ const cors = require('cors')
 const connectDB = require('./config/db')
 require('dotenv').config()
 const port = process.env.PORT
-const router = require('./routes/index')
+
+const adminRouter = require('./routes/adminRoutes')
+const hostRouter = require('./routes/hostRoutes')
+const customerRouter = require('./routes/customerRoutes')
 
 app.get('/',(req,res)=>{
   res.send('Hello World')
@@ -22,7 +25,10 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT','PATCH', 'DELETE'],
 }))
 
-app.use('/api',router)
+app.use('/api/user',customerRouter)
+app.use('/api/host',hostRouter)
+app.use('/api/admin',adminRouter)
+
 
 connectDB()
 app.listen(port, () => {
