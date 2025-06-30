@@ -18,7 +18,7 @@ hostRouter.get('/hostDashboard' , authHost ,getHostStats )
 hostRouter.get('/getVehicle/:id', authHost , getVehicle)
  
 hostRouter.get('/getBookingByOwner', authHost, getBookingByOwner) // get booking by owner id
-hostRouter.get('/bookingByVehicle/:id', authHost , getBookingByVehicleId)
+hostRouter.get('/bookingByVehicle/:vehicleId', authHost , getBookingByVehicleId)
 
 hostRouter.get('/getReviewByVehicle/:vehicleId',authHost,getReviewByVehicle)
 
