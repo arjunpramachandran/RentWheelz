@@ -15,10 +15,10 @@ hostRouter.delete('/deleteVehicle/:id', authHost, deleteVehicle) // delete vehic
 hostRouter.get('/getHostVehicle', authHost, getHostVehicle) // get vehicle
 hostRouter.get('/check-Host',authHost, checkUser)
 hostRouter.get('/hostDashboard' , authHost ,getHostStats )
-hostRouter.get('/getVehicle/:id',authHost,getVehicle)
-
+hostRouter.get('/getVehicle/:id', authHost , getVehicle)
+ 
 hostRouter.get('/getBookingByOwner', authHost, getBookingByOwner) // get booking by owner id
-hostRouter.get('/bookingByVehicle/:id',authHost,getBookingByVehicleId)
+hostRouter.get('/bookingByVehicle/:id', authHost , getBookingByVehicleId)
 
 hostRouter.get('/getReviewByVehicle/:vehicleId',authHost,getReviewByVehicle)
 
