@@ -151,6 +151,8 @@ const deleteVehicle = async (req, res, next) => {
 const getVehicle = async (req, res, next) => {
     try {
         const { id } = req.params
+        console.log(id);
+        
         const vehicle = await Vehicle.findById(id)
         if (!vehicle) return res.status(404).json({ message: "Vehicle Not Found" })
         res.status(200).json({ message: 'Vehicle Found', vehicle })
