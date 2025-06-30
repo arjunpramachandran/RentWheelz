@@ -32,14 +32,14 @@ const VehicleDetails = ({ vehicle }) => {
         <div className="flex flex-col md:flex-row gap-8 p-6 max-w-6xl mx-auto bg-white shadow rounded-2xl mt-6">
 
 
-            <div className="w-full md:w-1/2">
-                <Swiper spaceBetween={10} slidesPerView={1} onSwiper={(swiper) => { swiperRef.current = swiper }} className="rounded-xl">
+            <div className="w-1/2 ">
+                <Swiper spaceBetween={10} slidesPerView={1} onSwiper={(swiper) => { swiperRef.current = swiper }} className="rounded-xl w-auto">
                     {images.map((img, idx) => (
                         <SwiperSlide key={idx}>
                             <img
                                 src={img}
                                 alt={`Vehicle ${idx + 1}`}
-                                className="max-w-full aspect-video object-cover rounded-xl"
+                                className="object-cover rounded-xl"
                             />
                         </SwiperSlide>
                     ))}
@@ -60,7 +60,7 @@ const VehicleDetails = ({ vehicle }) => {
             </div>
 
 
-            <div className="w-full md:w-1/2 space-y-4">
+            <div className="w-1/2  space-y-4">
                 <h2 className="text-3xl font-bold">{brand} {model} ({year})</h2>
 
 

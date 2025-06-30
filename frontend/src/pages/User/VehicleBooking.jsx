@@ -288,6 +288,10 @@ const VehicleBooking = () => {
                         />
                     )}
 
+
+                    {/* payment review modal */}
+                    
+
                 </div>
 
             </div>

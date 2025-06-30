@@ -4,10 +4,29 @@ import Loader from '../../components/Loader';
 import { useParams } from 'react-router-dom';
 
 
-const MyBookings = (req,res) => {
+const MyBookings = (req, res) => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const formatDateTime = (datetime) => {
+    const date = new Date(datetime);
+    return date.toLocaleString('en-IN', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+  };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'confirmed':
+        return 'bg-green-100 text-green-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-700';
+      default:
+        return 'bg-gray-100 text-gray-600';
+    }
+  };
   const fetchBookings = async () => {
     try {
       const res = await api.get('/user/getBooking', { withCredentials: true });
@@ -18,6 +37,19 @@ const MyBookings = (req,res) => {
       setLoading(false);
     }
   };
+  const cancelBooking = async (bookingid) => {
+
+    try {
+      const response = await api.delete(`/user/deleteMyBooking/${bookingid}`, { withCredentials: true });
+      console.log(response);
+      fetchBookings()
+
+    } catch (error) {
+      console.error('Failed to load bookings:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     fetchBookings();
@@ -60,10 +92,12 @@ const MyBookings = (req,res) => {
 
               <div className="flex justify-between items-center mt-4">
                 <div className="text-base font-bold text-cyan-700">₹{booking.totalBill}</div>
+
                 {booking.driverRequired && (
                   <div className="text-sm text-green-600 font-medium">With Driver</div>
                 )}
               </div>
+              <div className='text-center'> <button onClick={() => cancelBooking(booking._id)} className='btn '>Cancel Booking</button></div>
             </div>
           ))}
         </div>
@@ -72,25 +106,6 @@ const MyBookings = (req,res) => {
   );
 };
 
-const formatDateTime = (datetime) => {
-  const date = new Date(datetime);
-  return date.toLocaleString('en-IN', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
-};
 
-const getStatusColor = (status) => {
-  switch (status) {
-    case 'pending':
-      return 'bg-yellow-100 text-yellow-800';
-    case 'confirmed':
-      return 'bg-green-100 text-green-800';
-    case 'cancelled':
-      return 'bg-red-100 text-red-700';
-    default:
-      return 'bg-gray-100 text-gray-600';
-  }
-};
 
 export default MyBookings;

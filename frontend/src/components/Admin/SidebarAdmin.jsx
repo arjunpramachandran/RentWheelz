@@ -106,7 +106,7 @@ const links = [
   { name: 'Payments', path: '/reviews' },
 ];
 
-const SidebarHost = () => {
+const SidebarAdmin = () => {
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { userData } = useSelector((state) => state.user);
@@ -122,7 +122,7 @@ const SidebarHost = () => {
     <>
       {/* Mobile toggle button */}
       <button
-        className="fixed top-0 left-0 z-50 text-cyan-600 text-3xl md:hidden"
+        className="fixed top-6 left-6 z-50 text-cyan-600 text-3xl md:hidden"
         onClick={toggleMenu}
       >
         {isOpen ? <RiCloseCircleFill /> : <MdSpaceDashboard />}
@@ -171,4 +171,4 @@ const SidebarHost = () => {
   );
 };
 
-export default SidebarHost;
+export default SidebarAdmin;

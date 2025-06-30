@@ -1,4 +1,4 @@
-// src/pages/host/Dashboard.jsx
+
 import React, { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
 import { useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import {
 
 const Dashboard = () => {
   const { userData, isLoggedIn } = useSelector((state) => state.user);
-  const token = localStorage.getItem('token');
+  
 
   const [vehicleCount, setVehicleCount] = useState(0);
   const [bookingCount, setBookingCount] = useState(0);
@@ -20,7 +20,7 @@ const Dashboard = () => {
     const fetchHostStats = async () => {
       try {
         const vehicleRes = await api.get('/host/getHostVehicle', {
-          headers: { Authorization: `Bearer ${token}` }
+         withCredentials:true
         });
         setVehicleCount(vehicleRes?.data?.vehicle.length || 0);
         
@@ -57,7 +57,7 @@ const Dashboard = () => {
       <h1 className="text-3xl font-bold mb-4">Welcome, {userData.name}!</h1>
       <p className="text-gray-600 mb-6">Here’s a quick summary of your activity.</p>
 
-      {/* Stats Cards */}
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         <div className="bg-white p-6 rounded-xl shadow-md text-center">
           <h2 className="text-lg font-semibold text-gray-700 mb-1">Total Vehicles</h2>

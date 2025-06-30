@@ -31,6 +31,10 @@ import UpdateProfileHost from '../pages/Host/UpdateProfile_Host'
 import VehicleUpdate from '../pages/Host/UpdateVehicle'
 import PaymentSuccess from '../pages/User/PaymentSuccess'
 import MyBookings from '../pages/User/MyBookings'
+import HostOrders from '../pages/Host/HostOrders'
+import VehicleLog from '../pages/Host/VehicleLog'
+import AdminLayout from '../Layouts/AdminLayout'
+import AdminDashboard from '../pages/Admin/AdminDashboard'
 
 
 const router = createBrowserRouter([
@@ -90,8 +94,23 @@ const router = createBrowserRouter([
               { path: 'add-vehicle', element: <AddVehicle /> },
               { path: 'my-Vehicle', element: <MyVehicles /> },
               { path: 'updateProfile', element: <UpdateProfileHost /> },
-              { path: 'updateVehicle/:id', element: <VehicleUpdate /> }
+              { path: 'updateVehicle/:id', element: <VehicleUpdate /> },
+              {path:'myOrders' , element:<HostOrders/>},
+              {path:'vehicleLog/:id',element:<VehicleLog/>}
 
+            ]
+          }
+        ]
+      },
+      {
+        path:'admin',
+        element:<ProtectedRoute allowedRole="admin"/>,
+        children:[
+          {
+            path:'',
+            element:<AdminLayout/>,
+            children:[
+              {path:'adminDashboard',element:<AdminDashboard/>}
             ]
           }
         ]

@@ -1,26 +1,23 @@
-import React, { useState } from 'react';
+import { CalendarDays, MapPin, Clock } from 'lucide-react'; // Use lucide icons
 import { useDispatch, useSelector } from 'react-redux';
-
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { savedBooking } from '../../app/features/user/bookingSlice';
 
 const UserDashboard = () => {
   const bookingData = useSelector((state) => state.booking.bookingData);
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  console.log(bookingData);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState( bookingData )
-  
-  
+  const [formData, setFormData] = useState(bookingData);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
-
 
   const getCurrentDateTime = () => {
     const now = new Date();
@@ -30,74 +27,84 @@ const UserDashboard = () => {
   };
 
   const minDateTime = getCurrentDateTime();
+
   const handleGo = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(savedBooking(formData));
-    navigate('/user/userBooking')
-  
-  }
+    navigate('/user/userBooking');
+  };
 
   return (
-    <>
-      
-      <div className=" bg-gradient-to-r from-cyan-500 to-green-400 border-double border-2   z-10  shadow-2xl  border-cyan-300 p-2 rounded-2xl ">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center">Book Your Ride</h2>
-        <form onSubmit={handleGo} className=' mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2' >
-          <div className='' >
-            <label className=" block text-sm font-medium text-gray-700 mb-2">
-              Pickup Location
-            </label>
+    <div className="bg-white/30 backdrop-blur-lg p-6 rounded-2xl shadow-xl border border-cyan-100 max-w-6xl mx-auto mt-10">
+      <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
+        Book Your Ride
+      </h2>
+
+      <form onSubmit={handleGo} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="relative">
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Pickup Location
+          </label>
+          <div className="flex items-center border rounded-lg shadow-sm p-2 bg-white">
+            <MapPin className="text-cyan-500 mr-2" />
             <input
               type="text"
-              className=" w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              placeholder={formData.pickupLocation?formData.pickupLocation:"Enter pickup location"}
               name="pickupLocation"
               value={formData.pickupLocation}
-              required
               onChange={handleChange}
+              placeholder="Enter pickup location"
+              required
+              className="w-full outline-none bg-transparent"
             />
           </div>
-          
-          <div className=''>
-            <label className=" block text-sm font-medium pt-2 text-gray-700 mb-1">
-              Pickup Date and Time
-            </label>
-            <input type="datetime-local" className="w-full input"
+        </div>
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Pickup Date & Time
+          </label>
+          <div className="flex items-center border rounded-lg shadow-sm p-2 bg-white">
+            <CalendarDays className="text-cyan-500 mr-2" />
+            <input
+              type="datetime-local"
               name="pickupDateTime"
-              placeholder={formData.pickupDateTime?formData.pickupDateTime:''}
               value={formData.pickupDateTime}
-              required
               onChange={handleChange}
               min={minDateTime}
-              
+              required
+              className="w-full outline-none bg-transparent"
             />
           </div>
-          <div className=''>
-            <label className="block text-sm font-medium text-gray-700 mb-1 pt-2">
-              Dropoff Date and Time
-            </label>
-            <input type="datetime-local" className="w-full input"
+        </div>
+
+        <div>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Dropoff Date & Time
+          </label>
+          <div className="flex items-center border rounded-lg shadow-sm p-2 bg-white">
+            <CalendarDays className="text-cyan-500 mr-2" />
+            <input
+              type="datetime-local"
               name="dropoffDateTime"
               value={formData.dropoffDateTime}
               onChange={handleChange}
               min={formData.pickupDateTime || minDateTime}
               required
-               />
+              className="w-full outline-none bg-transparent"
+            />
           </div>
-          <div className="col-span-full flex justify-center mt-4 "  >
-            <button type='submit' className="btn btn-circle border-2 bg-accent text-lg w-16 h-16 p-4 hover:bg-cyan-500 hover:text-white transition-colors duration-300">
-              GO
-            </button>
+        </div>
 
-          </div>
-        </form>
-
-      </div>
-
-  
-
-    </>
-
+        <div className="col-span-full flex justify-center mt-4">
+          <button
+            type="submit"
+            className="px-8 py-3 text-white font-semibold rounded-full shadow-lg transition duration-300 custom-gradient hover:brightness-110 active:scale-95"
+          >
+            Go
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
