@@ -3,6 +3,10 @@ import { useParams } from 'react-router-dom';
 import { api } from '../../config/axiosinstance';
 import VehicleDetails from '../../components/VehicleDetails'; // Reuse if already exists
 import { isAfter, isBefore, parseISO, format } from 'date-fns';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/autoplay";
+import { Autoplay } from "swiper/modules";
 
 const VehicleLog = () => {
   const { id } = useParams();
@@ -11,10 +15,11 @@ const VehicleLog = () => {
   const [completedRides, setCompletedRides] = useState([]);
   const [nextRides, setNextRides] = useState([])
   const [reviews, setReviews] = useState([]);
+  console.log(id);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.get(`host/getVehicle/${id}`, { withCredentials: true });
+      const res = await api.get(`user/getVehicle/${id}`, { withCredentials: true });
       setVehicle(res.data.vehicle);
 
       const rideRes = await api.get(`host/bookingByVehicle/${id}`, { withCredentials: true });
@@ -43,12 +48,27 @@ const VehicleLog = () => {
       setCurrentRide(rideOnGoing);
       setCompletedRides(rideCompleted);
       setNextRides(upcomingRides)
-      const reviewRes = await api.get(`/vehicle/${id}/reviews`);
+
+
+      const reviewRes = await api.get(`host/getReviewByVehicle/${id}`, { withCredentials: true });
+      console.log(reviewRes);
+
       setReviews(reviewRes.data.reviews);
     };
 
     fetchData();
   }, [id]);
+
+
+  const formattedReviews = reviews.map((review) => ({
+    name: review?.userId?.name || "Anonymous",
+    avatar: review?.userId?.profilepic || "",
+    message: review?.comment || "",
+    rating: review?.rating || 5,
+
+  }));
+
+  console.log(reviews);
 
   if (!vehicle) return <p>Loading...</p>;
 
@@ -122,15 +142,44 @@ const VehicleLog = () => {
         {reviews.length === 0 ? (
           <p className="text-gray-500">No reviews yet.</p>
         ) : (
-          <ul className="space-y-3">
-            {reviews.map((rev, index) => (
-              <li key={index} className="border p-3 rounded-md">
-                <p className="font-medium">{rev.userName}</p>
-                <p className="text-sm italic text-gray-600">"{rev.comment}"</p>
-                <p className="text-sm">Rating: {rev.rating} ⭐</p>
-              </li>
+          <div className='flex flex-row  gap-2'>
+            {formattedReviews.map((t, index) => (
+
+              <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 flex flex-col items-center text-left">
+                {t.avatar ? (
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    className="w-14 h-14 rounded-full mb-4 object-cover"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center mb-4 text-xl font-bold">
+                    {t.name.charAt(0)}
+                  </div>
+                )}
+
+                <div className="text-amber-500 text-base mb-2 flex">
+                  {Array.from({ length: 5 }, (_, i) => {
+                    const full = i + 1 <= Math.floor(t.rating);
+                    const half = i < t.rating && i + 1 > t.rating;
+
+                    return (
+                      <span key={i}>
+                        {full ? "★" : half ? "⯪" : "☆"}
+                      </span>
+                    );
+                  })}
+                </div>
+
+                <p className="text-gray-600 italic mb-4 text-sm">“{t.message}”</p>
+                <h3 className="text-lg font-semibold text-emerald-700">{t.name}</h3>
+                <p className="text-sm text-gray-500">{t.role}</p>
+              </div>
+
             ))}
-          </ul>
+          </div>
+
+
         )}
       </div>
     </div>
