@@ -19,6 +19,8 @@ const VehicleBooking = () => {
     const [baseCost, setBaseCost] = useState(0)
     const [driverCost, setDriverCost] = useState(0)
     const [totalCost, setTotalCost] = useState(0)
+    const [bookingId, setBookingId] = useState();
+
 
 
     const navigate = useNavigate()
@@ -75,7 +77,7 @@ const VehicleBooking = () => {
 
 
     const bookingData = useSelector((state) => state.booking.bookingData);
-    console.log(bookingData);
+   
     const [formData, setFormData] = useState({
         vehicleId: id,
         pickupLocation: bookingData.pickupLocation,
@@ -104,9 +106,22 @@ const VehicleBooking = () => {
             const res = await api.post(`/user/createBooking/${id}`, formData, {
                 withCredentials: true
             })
+
+            const bookid = res.data?.booking?.id;
+            
+
+            const checkoutData = {
+                vehicleId:id,
+                vehicleBrand: vehicle.brand,
+                vehicleModel: vehicle.model,
+                pickupDateTime: bookingData.pickupDateTime,
+                dropoffDateTime: bookingData.dropoffDateTime,
+                totalBill : totalCost,
+                bookingId : bookid
+            }
             if (res) {
                 try {
-                    const response = await api.post('user/create-checkout-session', formData, { withCredentials: true });
+                    const response = await api.post('user/create-checkout-session', checkoutData, { withCredentials: true });
                     const stripe = await stripePromise;
                     await stripe.redirectToCheckout({ sessionId: response.data.id });
 
@@ -124,6 +139,7 @@ const VehicleBooking = () => {
 
 
     }
+
     const getCurrentDateTime = () => {
         const now = new Date();
         const offset = now.getTimezoneOffset();
@@ -145,25 +161,65 @@ const VehicleBooking = () => {
     const query = new URLSearchParams(window.location.search);
     const isSuccess = query.get('success');
     const isCanceled = query.get('canceled');
+    const sessionId = query.get('session_id');
+
+   
+
+   
+
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ title: '', description: '' });
 
-    useEffect(() => {
-        if (isSuccess) {
-            setModalContent({
-                title: `Booking Confirmed `,
-                description: 'Your booking was successful. Redirecting to Dashboard...',
-                
-            });
-            setShowModal(true);
-        } else if (isCanceled) {
-            setModalContent({
-                title: `Payment Failed `,
-                description: 'Payment was cancelled or failed. Please try again.',
-            });
-            setShowModal(true);
+    const updateBooking = async (status, paymentId) => {
+        const query = new URLSearchParams(window.location.search);
+        const bookingId = query.get('bookingId')
+        if (!bookingId) return console.warn("No bookingId to update");
+        try {
+            const res = await api.post(`/user/updateBookingStatus/${bookingId}`, { status, paymentId }, {
+                withCredentials: true
+            })
+
+
+        } catch (error) {
+            console.error('Error updating booking:', error?.response?.data || error.message);
         }
-    }, []);
+    }
+    useEffect(() => {
+       
+      
+
+        const fetchSession = async () => {
+            if (!storedBookingId || !sessionId) return;
+
+            try {
+                const res = await api.get(`/user/retrieve-checkout-session/${sessionId}`, {
+                    withCredentials: true,
+                });
+                const paymentId = res.data?.payment_intent;
+                if ((isSuccess || isCanceled) && bookingId) {
+
+                    await updateBooking(isSuccess ? 'confirmed' : 'cancelled', paymentId)
+                    setModalContent({
+                        title: `Booking Confirmed `,
+                        description: 'Your booking was successful. Redirecting to Dashboard...',
+
+                    });
+                    setShowModal(true);
+                } else if (isCanceled) {
+                    setModalContent({
+                        title: `Payment Failed `,
+                        description: 'Payment was cancelled or failed. Please try again.',
+                    });
+                    setShowModal(true);
+                    localStorage.removeItem("latestBookingId")
+                }
+            } catch (error) {
+                console.error("Failed to retrieve Stripe session:", err);
+            }
+        }
+        fetchSession()
+    }, [sessionId, isSuccess]);
+
     if (!vehicle) return <Loader />
 
     return (
@@ -278,10 +334,10 @@ const VehicleBooking = () => {
                             description={modalContent.description}
                             onClose={() => {
                                 setShowModal(false);
-                                if(isSuccess) {
+                                if (isSuccess) {
                                     navigate('/user/userDashboard')
                                 }
-                                else if(isCanceled) {
+                                else if (isCanceled) {
                                     navigate(`/user/vehicleBooking/${id}`)
                                 }
                             }}
@@ -290,7 +346,7 @@ const VehicleBooking = () => {
 
 
                     {/* payment review modal */}
-                    
+
 
                 </div>
 

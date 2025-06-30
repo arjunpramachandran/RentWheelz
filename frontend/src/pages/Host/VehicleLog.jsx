@@ -19,10 +19,10 @@ const VehicleLog = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.get(`user/getVehicle/${id}`, { withCredentials: true });
+      const res = await api.get(`/host/getVehicle/${id}`, { withCredentials: true });
       setVehicle(res.data.vehicle);
 
-      const rideRes = await api.get(`host/bookingByVehicle/${id}`, { withCredentials: true });
+      const rideRes = await api.get(`/host/bookingByVehicle/${id}`, { withCredentials: true });
       const bookings = rideRes?.data?.bookings
       console.log(bookings);
 
