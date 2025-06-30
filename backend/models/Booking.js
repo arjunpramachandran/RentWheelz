@@ -12,13 +12,13 @@ const bookingSchema = new mongoose.Schema({
     },
 
     pickupLocation: {
-        type: {
-            type: String,
-        }
+
+        type: String,
+
     },
 
-    address:{
-        type:String
+    address: {
+        type: String
     },
     pickupDateTime: {
         type: Date,
@@ -28,8 +28,8 @@ const bookingSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    driverRequired:{
-        type:Boolean
+    driverRequired: {
+        type: Boolean
     },
     totalBill: {
         type: Number,
@@ -40,12 +40,12 @@ const bookingSchema = new mongoose.Schema({
         enum: ['pending', 'confirmed', 'completed', 'cancelled'],
         default: 'pending'
     },
-    
+
 
 },
-{
-    timestamps:true
-})
+    {
+        timestamps: true
+    })
 
 
 module.exports = mongoose.model('Booking', bookingSchema);

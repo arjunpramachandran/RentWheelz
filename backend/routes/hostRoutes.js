@@ -1,10 +1,10 @@
 const express = require('express')
 const hostRouter = express.Router()
-const {AddVehicle, updateVehicle, deleteVehicle} = require('../controllers/vehicleController')
+const {AddVehicle, updateVehicle, deleteVehicle, getVehicle} = require('../controllers/vehicleController')
 const {getHostVehicle,getHostStats} = require('../controllers/hostController')
 const {authHost} = require('../middleware/authMiddleware')
 const upload = require('../middleware/multer')
-const { getBookingByOwner } = require('../controllers/bookingController')
+const { getBookingByOwner, getBookingByVehicleId } = require('../controllers/bookingController')
 const { checkUser } = require('../controllers/customerController')
 
 
@@ -15,8 +15,9 @@ hostRouter.delete('/deleteVehicle/:id', authHost, deleteVehicle) // delete vehic
 hostRouter.get('/getHostVehicle', authHost, getHostVehicle) // get vehicle
 hostRouter.get('/check-Host',authHost, checkUser)
 hostRouter.get('/hostDashboard' , authHost ,getHostStats )
-
+hostRouter.get('/getVehicle/:id',authHost,getVehicle)
 hostRouter.get('/getBookingByOwner', authHost, getBookingByOwner) // get booking by owner id
+hostRouter.get('/bookingByVehicle/:id',authHost,getBookingByVehicleId)
 
 
 

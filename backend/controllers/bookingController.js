@@ -1,11 +1,11 @@
 const Booking = require('../models/Booking')
 const Vehicle = require('../models/Vehicle');
-
+const mongoose = require('mongoose')
 const createBooking = async (req, res) => {
     try {
         const userId = req.user.id;
         const { vehicleId } = req.params
-    
+
         const {
             pickupLocation,
             pickupDateTime,
@@ -148,6 +148,19 @@ const getBookingByOwner = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+const getBookingByVehicleId = async (req, res) => {
+    try {
+        const vehicleId = new mongoose.Types.ObjectId(req.params)
+        const bookings = await Booking.find({ vehicleId })
+        if (!bookings) return res.status(404).json({ message: "No bookings found" })
+        res.status(200).json({ message: "Bookings retrieved successfully", bookings })
+    } catch (error) {
+        console.error('Error retrieving bookings by owner:', error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+
+}
 const getAllBookings = async (req, res) => {
     try {
         const bookings = await Booking.find().populate('vehicleId').populate('userId', 'name email phone')
@@ -190,7 +203,7 @@ const deleteBooking = async (req, res) => {
         if (!deletedBooking) {
             return res.status(404).json({ error: 'Booking not found' });
         }
-        res.status(200).json({ message: 'Booking deleted successfully' });
+        res.status(200).json({ message: 'Booking Canceled successfully' });
     } catch (error) {
         console.error('Error deleting booking:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -209,7 +222,7 @@ const deleteMyBooking = async (req, res) => {
             return res.status(403).json({ error: 'You are not authorized to delete this booking' });
         }
         await Booking.findByIdAndDelete(id);
-        res.status(200).json({ message: 'Booking deleted successfully' });
+        res.status(200).json({ message: 'Booking Cancelled successfully' });
     }
     catch (error) {
         console.error('Error deleting booking:', error);
@@ -218,4 +231,4 @@ const deleteMyBooking = async (req, res) => {
 
 };
 
-module.exports = { createBooking, getBooking, getAllBookings, updateBookingStatus, deleteBooking, deleteMyBooking, getBookingByOwner, getBookingById };
+module.exports = { createBooking, getBooking, getAllBookings, updateBookingStatus, deleteBooking,getBookingByVehicleId, deleteMyBooking, getBookingByOwner, getBookingById };

@@ -1,5 +1,7 @@
 const Vehicle = require('../models/Vehicle')
 const Booking = require('../models/Booking')
+const mongoose = require('mongoose')
+
 
 const getHostVehicle = async (req, res, next) => {
     try {
@@ -17,47 +19,47 @@ const getHostVehicle = async (req, res, next) => {
 }
 
 
+
+
 const getHostStats = async (req, res) => {
   try {
-    const hostId = req.user.id;
+    const hostObjectId = new mongoose.Types.ObjectId(req.user.id);
 
-    const totalVehicles = await Vehicle.countDocuments({ hostId });
-
-    const hostVehicles = await Vehicle.find({ hostId }, '_id');
+    const totalVehicles = await Vehicle.countDocuments({ ownerId: hostObjectId });
+    console.log(totalVehicles);
+    
+    const hostVehicles = await Vehicle.find({ ownerId: hostObjectId }, '_id');
     const vehicleIds = hostVehicles.map(v => v._id);
 
     const totalBookings = await Booking.countDocuments({ vehicleId: { $in: vehicleIds } });
 
-  
     const earningsResult = await Booking.aggregate([
       { $match: { vehicleId: { $in: vehicleIds } } },
-      { $group: { _id: null, total: { $sum: '$amount' } } }
+      { $group: { _id: null, total: { $sum: '$totalBill' } } }
     ]);
+    console.log(earningsResult);
+    
     const totalEarnings = earningsResult[0]?.total || 0;
 
-  
+
     const monthlyData = await Booking.aggregate([
       {
         $match: {
           vehicleId: { $in: vehicleIds },
-          createdAt: { $gte: new Date(new Date().getFullYear(), 0, 1) } // from Jan 1st
+          createdAt: { $gte: new Date(new Date().getFullYear(), 0, 1) }
         }
       },
       {
         $group: {
           _id: { $month: '$createdAt' },
-          earnings: { $sum: '$amount' }
+          earnings: { $sum: '$totalBill' }
         }
       },
-      {
-        $sort: { '_id': 1 }
-      }
+      { $sort: { '_id': 1 } }
     ]);
 
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     const monthlyFormatted = months.map((month, index) => {
       const match = monthlyData.find(m => m._id === index + 1);
@@ -79,6 +81,7 @@ const getHostStats = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch host statistics' });
   }
 };
+
 module.exports = {
     getHostVehicle,getHostStats
 }
