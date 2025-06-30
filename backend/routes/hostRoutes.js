@@ -5,7 +5,7 @@ const {getHostVehicle,getHostStats} = require('../controllers/hostController')
 const {authHost} = require('../middleware/authMiddleware')
 const upload = require('../middleware/multer')
 const { getBookingByOwner, getBookingByVehicleId } = require('../controllers/bookingController')
-const { checkUser } = require('../controllers/customerController')
+const { checkUser, getReviewByVehicle } = require('../controllers/customerController')
 
 
 
@@ -16,10 +16,11 @@ hostRouter.get('/getHostVehicle', authHost, getHostVehicle) // get vehicle
 hostRouter.get('/check-Host',authHost, checkUser)
 hostRouter.get('/hostDashboard' , authHost ,getHostStats )
 hostRouter.get('/getVehicle/:id',authHost,getVehicle)
+
 hostRouter.get('/getBookingByOwner', authHost, getBookingByOwner) // get booking by owner id
 hostRouter.get('/bookingByVehicle/:id',authHost,getBookingByVehicleId)
 
-
+hostRouter.get('/getReviewByVehicle/:vehicleId',authHost,getReviewByVehicle)
 
 
 

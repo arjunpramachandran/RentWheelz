@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const createToken = require('../utils/generateToken')
 const Review = require('../models/Review')
 const { cloudinaryInstance } = require('../config/cloudinary')
+const { default: mongoose } = require('mongoose')
 
 
 //REGISTER
@@ -254,11 +255,12 @@ const UpdatePassword = async (req, res, next) => {
 }
 const addReview = async (req, res, next) => {
     try {
+        const vehicleId = new mongoose.Types.ObjectId(req.params.id)
         const userId = req.user.id
         const { rating, comment } = req.body || {}
         if (!rating || !comment) return res.status(400).json({ error: "All Fields are Required" })
 
-        const review = new Review({ userId, rating, comment })
+        const review = new Review({ userId,vehicleId, rating, comment })
         const savedReview = await review.save()
 
         res.status(201).json({ message: "Review Added", savedReview })
@@ -268,10 +270,26 @@ const addReview = async (req, res, next) => {
     }
 }
 
-
+const getReviewByVehicle  = async (req,res,next)=>{
+    try {
+        const {vehicleId} = req.params
+        console.log(vehicleId);
+        
+        const reviews = await Review.find({vehicleId})
+            .populate('userId', 'name profilepic email,phone')
+    
+        if (!reviews) return res.status(404).json({ message: "No reviews found" })
+            res.status(200).json({ message: "Reviews retrieved successfully", reviews })
+    } catch (error) {
+         console.log(error);
+        res.status(error.status || 500).json({ error: error.message || "Internal Server Message" })
+    }
+}
 const getAllReviews = async (req, res) => {
     try {
-        const reviews = await Review.find().populate('userId', 'name profilepic role') // Populate userId with name and profilepic
+        const reviews = await Review.find()
+        .populate('userId', 'name profilepic email,phone') // Populate userId with name and profilepic
+        .populate('vehicleId','brand model ')
         if (!reviews) return res.status(404).json({ message: "No reviews found" })
         res.status(200).json({ message: "Reviews retrieved successfully", reviews })
 
@@ -301,4 +319,4 @@ const deleteMyReview = async (req, res) => {
     }
 }
 
-module.exports = { register, login, checkUser, profile, logout, updateProfile, UpdatePassword, addReview, getAllReviews, deleteMyReview };
+module.exports = { register, login, checkUser, profile, logout, updateProfile, UpdatePassword, addReview,getReviewByVehicle, getAllReviews, deleteMyReview };

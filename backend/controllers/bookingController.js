@@ -151,7 +151,7 @@ const getBookingByOwner = async (req, res) => {
 
 const getBookingByVehicleId = async (req, res) => {
     try {
-        const vehicleId = new mongoose.Types.ObjectId(req.params)
+        const vehicleId = new mongoose.Types.ObjectId(req.params.id)
         const bookings = await Booking.find({ vehicleId })
         if (!bookings) return res.status(404).json({ message: "No bookings found" })
         res.status(200).json({ message: "Bookings retrieved successfully", bookings })

@@ -151,7 +151,7 @@ const deleteVehicle = async (req, res, next) => {
 }
 const getVehicle = async (req, res, next) => {
     try {
-        const  id  = new mongoose.Types.ObjectId(req.params)
+        const  {id} = req.params
         console.log(id);
         
         const vehicle = await Vehicle.findById(id)
