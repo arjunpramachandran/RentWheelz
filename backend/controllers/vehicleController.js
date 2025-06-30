@@ -1,5 +1,6 @@
 const Vehicle = require('../models/Vehicle')
 const { cloudinaryInstance } = require('../config/cloudinary')
+const mongoose = require('mongoose')
 
 
 
@@ -150,7 +151,7 @@ const deleteVehicle = async (req, res, next) => {
 }
 const getVehicle = async (req, res, next) => {
     try {
-        const { id } = req.params
+        const { id } = mongoose.Types.ObjectId(req.params)
         console.log(id);
         
         const vehicle = await Vehicle.findById(id)
