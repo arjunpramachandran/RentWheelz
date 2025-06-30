@@ -5,8 +5,8 @@ const {authUser} = require('../middleware/authMiddleware')
 const { getAllVehicles } = require('../controllers/adminController')
 const { getVehicle } = require('../controllers/vehicleController')
 const upload = require('../middleware/multer')
-const { createBooking, getBooking, deleteMyBooking } = require('../controllers/bookingController')
-const { createCheckoutSession } = require('../controllers/paymentController')
+const { createBooking, getBooking, deleteMyBooking, updateBookingStatus } = require('../controllers/bookingController')
+const { createCheckoutSession, getStripeSession } = require('../controllers/paymentController')
 
 
 
@@ -35,12 +35,13 @@ customerRouter.get('getReviewByVehicle/:vehicleId',authUser,getReviewByVehicle)
 customerRouter.post('/createBooking/:vehicleId', authUser,createBooking) //create booking
 customerRouter.get('/getBooking', authUser, getBooking ) //get booking by user id
 customerRouter.delete('/deleteMyBooking/:id', authUser,deleteMyBooking) //delete booking by id
+customerRouter.patch('/updateBookingStatus:id', authUser,updateBookingStatus)
 
 
 
 customerRouter.post('/create-checkout-session' , authUser,createCheckoutSession)
 
-
+customerRouter.get('/retrieve-checkout-session/:sessionId', authUser, getStripeSession);
 
 
 

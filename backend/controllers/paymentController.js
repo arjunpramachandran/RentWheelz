@@ -2,7 +2,7 @@ const stripe = require('../config/stripe')
 
 const createCheckoutSession = async (req, res) => {
     try {
-        const { vehicleId, pickupLocation, pickupDateTime, dropoffDateTime, address, driverRequired, totalBill } = req.body;
+        const {vehicleId, vehicleBrand,VehicleModel,  pickupDateTime, dropoffDateTime, totalBill ,bookingId } = req.body;
         const userId = req.user.id;
 
         
@@ -14,7 +14,7 @@ const createCheckoutSession = async (req, res) => {
                 price_data: {
                     currency: 'inr',
                     product_data: {
-                        name: `Booking for Vehicle ID ${vehicleId}`,
+                        name: `Booking for Vehicle ${vehicleBrand} ${VehicleModel}`,
                         description: `From ${pickupDateTime} to ${dropoffDateTime}`,
                     },
                     unit_amount: Math.round(totalBill * 100), 
@@ -24,13 +24,12 @@ const createCheckoutSession = async (req, res) => {
             metadata: {
                 vehicleId,
                 userId,
-                pickupLocation,
+               
                 pickupDateTime,
                 dropoffDateTime,
-                address,
-                driverRequired,
+               
             },
-            success_url: `${process.env.CLIENT_URL}/user/vehicleBooking/${vehicleId}?success=true`,
+            success_url: `${process.env.CLIENT_URL}/user/vehicleBooking/${vehicleId}?success=true&bookingId=${bookingId}&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.CLIENT_URL}/user/vehicleBooking/${vehicleId}?success=false`,
         });
 
@@ -41,4 +40,20 @@ const createCheckoutSession = async (req, res) => {
         res.status(500).json({ error: 'Failed to create Stripe session' });
     }
 };
-module.exports={createCheckoutSession}
+
+
+const getStripeSession = async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
+    res.json({
+      id: session.id,
+      payment_intent: session.payment_intent,
+      amount_total: session.amount_total,
+      currency: session.currency,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to retrieve session" });
+  }
+};
+module.exports={createCheckoutSession ,getStripeSession}

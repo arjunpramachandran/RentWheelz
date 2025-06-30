@@ -154,7 +154,7 @@ const getBookingByVehicleId = async (req, res) => {
         const {vehicleId} = req.params
         const bookings = await Booking.find({ vehicleId })
         .populate('userId' , 'name email phone')
-        
+
         if (!bookings) return res.status(404).json({ message: "No bookings found" })
         res.status(200).json({ message: "Bookings retrieved successfully", bookings })
     } catch (error) {
@@ -178,13 +178,13 @@ const getAllBookings = async (req, res) => {
 const updateBookingStatus = async (req, res) => {
     try {
         const { id } = req.params;
-        const { status } = req.body;
+        const { status ,paymentId} = req.body;
 
-        if (!status || !['pending', 'confirmed', 'completed', 'cancelled'].includes(status)) {
+        if (!status || !['pending', 'confirmed', 'completed', 'cancelled'].includes(status) || !paymentId) {
             return res.status(400).json({ error: 'Invalid status' });
         }
 
-        const updatedBooking = await Booking.findByIdAndUpdate(id, { status }, { new: true });
+        const updatedBooking = await Booking.findByIdAndUpdate(id, { status ,paymentId}, { new: true });
 
         if (!updatedBooking) {
             return res.status(404).json({ error: 'Booking not found' });
