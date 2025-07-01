@@ -107,7 +107,8 @@ const VehicleBooking = () => {
                 withCredentials: true
             })
 
-            const bookid = res.data?.booking?.id;
+            const bookid = res.data?.booking?._id;
+            
             
 
             const checkoutData = {
@@ -119,6 +120,8 @@ const VehicleBooking = () => {
                 totalBill : totalCost,
                 bookingId : bookid
             }
+            console.log(checkoutData);
+            
             if (res) {
                 try {
                     const response = await api.post('user/create-checkout-session', checkoutData, { withCredentials: true });
@@ -163,10 +166,6 @@ const VehicleBooking = () => {
     const isCanceled = query.get('canceled');
     const sessionId = query.get('session_id');
 
-   
-
-   
-
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ title: '', description: '' });
 
@@ -175,7 +174,7 @@ const VehicleBooking = () => {
         const bookingId = query.get('bookingId')
         if (!bookingId) return console.warn("No bookingId to update");
         try {
-            const res = await api.post(`/user/updateBookingStatus/${bookingId}`, { status, paymentId }, {
+            const res = await api.patch(`/user/updateBookingStatus/${bookingId}`, { status, paymentId }, {
                 withCredentials: true
             })
 
@@ -189,14 +188,16 @@ const VehicleBooking = () => {
       
 
         const fetchSession = async () => {
-            if (!storedBookingId || !sessionId) return;
+            if ( !sessionId) return;
 
             try {
                 const res = await api.get(`/user/retrieve-checkout-session/${sessionId}`, {
                     withCredentials: true,
                 });
+                console.log(res);
+                
                 const paymentId = res.data?.payment_intent;
-                if ((isSuccess || isCanceled) && bookingId) {
+                if ((isSuccess || isCanceled)) {
 
                     await updateBooking(isSuccess ? 'confirmed' : 'cancelled', paymentId)
                     setModalContent({
