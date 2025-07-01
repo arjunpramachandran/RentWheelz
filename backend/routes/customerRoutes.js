@@ -5,7 +5,7 @@ const {authUser} = require('../middleware/authMiddleware')
 const { getAllVehicles } = require('../controllers/adminController')
 const { getVehicle } = require('../controllers/vehicleController')
 const upload = require('../middleware/multer')
-const { createBooking, getBooking, deleteMyBooking, updateBookingStatus } = require('../controllers/bookingController')
+const { createBooking, getBooking, deleteMyBooking, updateBookingStatus, cancelBooking } = require('../controllers/bookingController')
 const { createCheckoutSession, getStripeSession } = require('../controllers/paymentController')
 
 
@@ -27,15 +27,15 @@ customerRouter.patch('/update',authUser,upload.fields([{name:'profilepic'},{name
 customerRouter.patch('/updatePassword',authUser,UpdatePassword) //update password
 
 
-customerRouter.post('/review',authUser, addReview)
+customerRouter.post('/review/:vehicleId',authUser, addReview)
 customerRouter.get('/getAllReviews',getAllReviews) //get all reviews
 customerRouter.delete('/deleteMyReview/:id',authUser, deleteMyReview) //delete my review
 customerRouter.get('getReviewByVehicle/:vehicleId',authUser,getReviewByVehicle)
 
 customerRouter.post('/createBooking/:vehicleId', authUser,createBooking) //create booking
 customerRouter.get('/getBooking', authUser, getBooking ) //get booking by user id
-customerRouter.delete('/deleteMyBooking/:id', authUser,deleteMyBooking) //delete booking by id
-customerRouter.patch('/updateBookingStatus:id', authUser,updateBookingStatus)
+customerRouter.patch('/cancelMyBooking/:id', authUser,cancelBooking) //delete booking by id
+customerRouter.patch('/updateBookingStatus/:id', authUser,updateBookingStatus)
 
 
 

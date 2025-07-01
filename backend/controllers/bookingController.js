@@ -110,17 +110,38 @@ const getBookingById = async (req, res) => {
 
 const getBooking = async (req, res) => {
     try {
-        userId = req.user.id
-        const booking = await Booking.find({ userId: userId }).populate('vehicleId', 'type brand model year registrationNumber ')
-        if (!booking) return res.status(404).json({ message: "No bookings found" })
-        res.status(200).json({ message: "Bookings retrieved successfully", booking })
+        const userId = req.user.id;
 
+        let bookings = await Booking.find({ userId }).populate(
+            'vehicleId',
+            'type brand model year registrationNumber'
+        );
+
+        if (!bookings || bookings.length === 0) {
+            return res.status(404).json({ message: 'No bookings found' });
+        }
+
+        const now = new Date();
+        for (let booking of bookings) {
+            if (
+                booking.status === 'confirmed' &&
+                new Date(booking.dropoffDateTime) < now
+            ) {
+                booking.status = 'completed';
+                await booking.save();
+            }
+        }
+
+        res.status(200).json({
+            message: 'Bookings retrieved successfully',
+            bookings,
+        });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Internal server error" })
-
+        res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
+
 // get booking by owner id
 const getBookingByOwner = async (req, res) => {
     try {
@@ -141,6 +162,17 @@ const getBookingByOwner = async (req, res) => {
             return res.status(404).json({ message: "No bookings found for this owner" });
         }
 
+        const now = new Date();
+        for (let booking of bookings) {
+            if (
+                booking.status === 'confirmed' &&
+                new Date(booking.dropoffDateTime) < now
+            ) {
+                booking.status = 'completed';
+                await booking.save();
+            }
+        }
+
         res.status(200).json({ message: "Bookings retrieved successfully", bookings });
 
     } catch (error) {
@@ -151,9 +183,9 @@ const getBookingByOwner = async (req, res) => {
 
 const getBookingByVehicleId = async (req, res) => {
     try {
-        const {vehicleId} = req.params
+        const { vehicleId } = req.params
         const bookings = await Booking.find({ vehicleId })
-        .populate('userId' , 'name email phone')
+            .populate('userId', 'name email phone')
 
         if (!bookings) return res.status(404).json({ message: "No bookings found" })
         res.status(200).json({ message: "Bookings retrieved successfully", bookings })
@@ -167,6 +199,17 @@ const getAllBookings = async (req, res) => {
     try {
         const bookings = await Booking.find().populate('vehicleId').populate('userId', 'name email phone')
         if (!bookings) return res.status(404).json({ message: "No bookings found" })
+
+        const now = new Date();
+        for (let booking of bookings) {
+            if (
+                booking.status === 'confirmed' &&
+                new Date(booking.dropoffDateTime) < now
+            ) {
+                booking.status = 'completed';
+                await booking.save();
+            }
+        }
         res.status(200).json({ message: "Bookings retrieved successfully", bookings })
 
     } catch (error) {
@@ -178,13 +221,14 @@ const getAllBookings = async (req, res) => {
 const updateBookingStatus = async (req, res) => {
     try {
         const { id } = req.params;
-        const { status ,paymentId} = req.body;
+        const { status, paymentId } = req.body;
+        console.log(id, status, paymentId);
 
         if (!status || !['pending', 'confirmed', 'completed', 'cancelled'].includes(status) || !paymentId) {
             return res.status(400).json({ error: 'Invalid status' });
         }
 
-        const updatedBooking = await Booking.findByIdAndUpdate(id, { status ,paymentId}, { new: true });
+        const updatedBooking = await Booking.findByIdAndUpdate(id, { status, paymentId }, { new: true });
 
         if (!updatedBooking) {
             return res.status(404).json({ error: 'Booking not found' });
@@ -192,6 +236,18 @@ const updateBookingStatus = async (req, res) => {
 
         res.status(200).json({ message: 'Booking status updated successfully', booking: updatedBooking });
 
+    } catch (error) {
+        console.error('Error updating booking status:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+const cancelBooking = async (req, res) => {
+    try {
+        const { id } = req.params
+        const canceledBooking = await Booking.findByIdAndUpdate(id, { status: 'cancelled' }, { new: true })
+        if (!canceledBooking) return res.status(404).json({ error: 'Booking not found' });
+
+        res.status(200).json({ message: 'Booking Cancelled Successfully', cancelled: canceledBooking })
     } catch (error) {
         console.error('Error updating booking status:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -205,32 +261,12 @@ const deleteBooking = async (req, res) => {
         if (!deletedBooking) {
             return res.status(404).json({ error: 'Booking not found' });
         }
-        res.status(200).json({ message: 'Booking Canceled successfully' });
+        res.status(200).json({ message: 'Booking Deleted successfully' });
     } catch (error) {
         console.error('Error deleting booking:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-const deleteMyBooking = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const userId = req.user.id;
 
-        const booking = await Booking.findById(id);
-        if (!booking) {
-            return res.status(404).json({ error: 'Booking not found' });
-        }
-        if (booking.userId.toString() !== userId) {
-            return res.status(403).json({ error: 'You are not authorized to delete this booking' });
-        }
-        await Booking.findByIdAndDelete(id);
-        res.status(200).json({ message: 'Booking Cancelled successfully' });
-    }
-    catch (error) {
-        console.error('Error deleting booking:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
 
-};
-
-module.exports = { createBooking, getBooking, getAllBookings, updateBookingStatus, deleteBooking,getBookingByVehicleId, deleteMyBooking, getBookingByOwner, getBookingById };
+module.exports = { createBooking, getBooking, getAllBookings, updateBookingStatus, cancelBooking, deleteBooking, getBookingByVehicleId, getBookingByOwner, getBookingById };
