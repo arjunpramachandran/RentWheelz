@@ -205,7 +205,7 @@ const getAllBookings = async (req, res) => {
         const now = new Date();
         for (let booking of bookings) {
             if (
-                booking.status === 'confirmed' &&
+                ['confirmed', 'pending'].includes(booking.status) &&
                 new Date(booking.dropoffDateTime) < now
             ) {
                 booking.status = 'completed';

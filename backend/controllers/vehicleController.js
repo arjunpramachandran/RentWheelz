@@ -141,7 +141,7 @@ const updateVehicle = async (req, res, next) => {
 const getVehicle = async (req, res, next) => {
     try {
         const  {id} = req.params
-        console.log(id);
+        console.log('vehicleId:',id);
         
         const vehicle = await Vehicle.findById(id).populate("ownerId","name email phone")
         if (!vehicle) return res.status(404).json({ message: "Vehicle Not Found" })
