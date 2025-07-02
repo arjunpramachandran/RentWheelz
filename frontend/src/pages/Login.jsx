@@ -1,36 +1,38 @@
-import React ,{useState} from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FaUser, FaLock } from 'react-icons/fa';
-import { api } from '../config/axiosinstance'; 
+import { api } from '../config/axiosinstance';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { toast } from 'react-hot-toast';
 
 import { useSelector, useDispatch } from 'react-redux'
-import {saveUser , logoutUser , updateUser} from '../app/features/user/userSlice'
+import { saveUser, logoutUser, updateUser } from '../app/features/user/userSlice'
 
 const Login = () => {
-const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
 
-const dispatch = useDispatch()
- 
-const nav = useNavigate();
-  
-  const postData =async(values)=>{
+  const dispatch = useDispatch()
+
+  const nav = useNavigate();
+
+  const postData = async (values) => {
     try {
       const response = await api({
         method: 'POST',
         url: '/user/login',
         data: values,
       });
-      
+
       const userData = response?.data?.userObject;
-      
+
       dispatch(saveUser(userData));
-      return nav(userData.role === 'host' ? '/host/dashboard' : userData.role === 'admin' ? '/admin/adminDashboard' : '/user/userDashboard');
+      toast.success("Login successful!");
+      return nav(userData.role === 'host' ? '/host/dashboard' : userData.role === 'admin' ? '/admin/dashboard' : '/user/userDashboard');
     } catch (error) {
       console.log('Error during login:', error?.response);
       setError(error?.response?.data?.error || 'An error occurred during login');
+      toast.error("Invalid credentials");
     }
   }
   const formik = useFormik({
@@ -51,7 +53,7 @@ const nav = useNavigate();
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-cyan-100 to-green-100 px-4">
       <div className="max-w-md w-full bg-white shadow-lg rounded-xl p-8">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login to Your  Account</h2>
-        
+
         <form className="space-y-5" onSubmit={formik.handleSubmit}>
           {/* Email */}
           <div>
@@ -106,9 +108,11 @@ const nav = useNavigate();
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-cyan-600 text-white py-2 rounded-md hover:bg-cyan-700 transition"
+            disabled={formik.isSubmitting}
+            className={`w-full py-2 rounded-md transition ${formik.isSubmitting ? 'bg-cyan-400 cursor-not-allowed' : 'bg-cyan-600 hover:bg-cyan-700 text-white'
+              }`}
           >
-            Login
+            {formik.isSubmitting ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
@@ -117,7 +121,7 @@ const nav = useNavigate();
         </p>
       </div>
     </div>
-  ); 
+  );
 };
 
 export default Login;

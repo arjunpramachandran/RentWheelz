@@ -100,10 +100,10 @@ import { useSelector } from 'react-redux';
 import { TbEdit } from 'react-icons/tb';
 
 const links = [
-  { name: 'My Vehicles', path: '/host/my-vehicle' },
+  { name: 'All Vehicles', path: '/admin/vehicleList' },
   { name: 'Add Vehicle', path: '/host/add-vehicle' },
-  { name: 'Orders', path: '/host/myOrders' },
-  { name: 'Payments', path: '/reviews' },
+  { name: 'All Orders', path: '/host/myOrders' },
+  { name: 'All Payments', path: '/reviews' },
 ];
 
 const SidebarAdmin = () => {

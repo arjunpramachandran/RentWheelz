@@ -8,8 +8,8 @@ import { TbEdit } from 'react-icons/tb';
 
 const links = [
   { name: 'My Bookings', path: '/user/my-bookings' },
-  { name: 'My Coupons', path: '/coupons' },
-  { name: 'My Reviews', path: '/reviews' },
+  { name: 'My Coupons', path: '#' },
+  { name: 'My Reviews', path: '#' },
 ];
 
 const SidebarUser = () => {

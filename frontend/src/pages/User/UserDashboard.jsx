@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { savedBooking } from '../../app/features/user/bookingSlice';
+import Memberships from './Memberships';
+import UserCoupons from './UserCoupens';
 
 const UserDashboard = () => {
   const bookingData = useSelector((state) => state.booking.bookingData);
@@ -35,7 +37,8 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="bg-white/30 backdrop-blur-lg p-6 rounded-2xl shadow-xl border border-cyan-100 max-w-6xl mx-auto mt-10">
+    <div>
+      <div className="bg-white/30 backdrop-blur-lg p-6 rounded-2xl shadow-xl border border-cyan-100 max-w-6xl mx-auto mt-10">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
         Book Your Ride
       </h2>
@@ -104,7 +107,13 @@ const UserDashboard = () => {
           </button>
         </div>
       </form>
+
+     
     </div>
+     <Memberships/>
+     <UserCoupons/>
+    </div>
+    
   );
 };
 

@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { api } from '../config/axiosinstance'
 import { logoutUser, saveUser } from '../app/features/user/userSlice'
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -26,6 +27,8 @@ const RootLayout = () => {
     checkAuth()
   },[dispatch])
   return (
+    <>
+     <Toaster position="top-right" reverseOrder={false} />
     <div className='min-h-screen   flex flex-col'>
      
         <Nav />
@@ -37,6 +40,8 @@ const RootLayout = () => {
 
       <Footer />
     </div>
+    </>
+    
   )
 }
 

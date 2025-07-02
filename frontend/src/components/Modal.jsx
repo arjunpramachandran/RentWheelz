@@ -13,7 +13,7 @@ const ModalDialog = ({ title = 'Alert', description, onClose }) => {
 
   const handleClose = () => {
     setOpen(false);
-    onClose(); // Notify parent
+    onClose();
   };
 
   return (

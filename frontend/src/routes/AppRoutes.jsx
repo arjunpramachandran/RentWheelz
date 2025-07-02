@@ -35,6 +35,7 @@ import HostOrders from '../pages/Host/HostOrders'
 import VehicleLog from '../pages/Host/VehicleLog'
 import AdminLayout from '../Layouts/AdminLayout'
 import AdminDashboard from '../pages/Admin/AdminDashboard'
+import VehicleList from '@/pages/Admin/VehicleList'
 
 
 const router = createBrowserRouter([
@@ -110,7 +111,12 @@ const router = createBrowserRouter([
             path:'',
             element:<AdminLayout/>,
             children:[
-              {path:'adminDashboard',element:<AdminDashboard/>}
+              {path:'dashboard',element:<AdminDashboard/>},
+              {path:'vehicleList', element:<VehicleList/>},
+              {path:'addVehicle',element:<AddVehicle/>},
+              {path:'updateVehicle/:id',element:<VehicleUpdate/>},
+              {path:'vehicleLog/:id',element:<VehicleLog/>}
+              
             ]
           }
         ]
