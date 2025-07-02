@@ -64,6 +64,8 @@ const createBooking = async (req, res) => {
         });
 
         const savedBooking = await newBooking.save();
+        vehicle.status = 'booked';
+        await vehicle.save();
 
         res.status(201).json({
             message: 'Booking created successfully',

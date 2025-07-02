@@ -137,24 +137,13 @@ const updateVehicle = async (req, res, next) => {
         res.status(error.status || 500).json({ error: error.message || "Internal Server Message" })
     }
 }
-const deleteVehicle = async (req, res, next) => {
-    try {
-        const { id } = req.params
-        const deletedVehicle = await Vehicle.findByIdAndDelete(id)
-        if (!deletedVehicle) return res.status(404).json({ message: "Vehicle Not Found" })
-        res.status(200).json({ message: 'Vehicle Deleted Successfully' })
 
-    } catch (error) {
-        console.log(error);
-        res.status(error.status || 500).json({ error: error.message || "Internal Server Message" })
-    }
-}
 const getVehicle = async (req, res, next) => {
     try {
         const  {id} = req.params
         console.log(id);
         
-        const vehicle = await Vehicle.findById(id)
+        const vehicle = await Vehicle.findById(id).populate("ownerId","name email phone")
         if (!vehicle) return res.status(404).json({ message: "Vehicle Not Found" })
         res.status(200).json({ message: 'Vehicle Found', vehicle })
     } catch (error) {
@@ -176,7 +165,7 @@ const getVehiclebyOwner = async (req, res, next) => {
 module.exports = {
     AddVehicle,
     updateVehicle,
-    deleteVehicle,
+    
     getVehicle,
     getVehiclebyOwner
 

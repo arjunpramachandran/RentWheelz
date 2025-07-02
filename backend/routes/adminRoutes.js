@@ -2,8 +2,8 @@ const express = require('express')
 const adminRouter = express.Router()
 
 const {authAdmin} = require('../middleware/authMiddleware')
-const {getAllCustomer,getAllHost,getAllVehicles,getAllReviews,getAllPayments,deleteUserProfile} = require('../controllers/adminController')
-const {AddVehicle,updateVehicle,deleteVehicle,getVehicle,getVehiclebyOwner} = require('../controllers/vehicleController')
+const {getAllCustomer,getAllHost,getAllVehicles,getAllReviews,getAllPayments,deleteUserProfile, getAdminOverview, getUserStats, getVehicleStats, getVehicleApprovalStats, approveVehicle, deleteVehicle} = require('../controllers/adminController')
+const {AddVehicle,updateVehicle,getVehicle,getVehiclebyOwner} = require('../controllers/vehicleController')
 const { getBookingById , getAllBookings, updateBookingStatus, deleteBooking} = require('../controllers/bookingController')
 const { checkUser } = require('../controllers/customerController')
 
@@ -31,7 +31,13 @@ adminRouter.patch('/updateVehicle/:id',authAdmin,updateVehicle) //update vehicle
 adminRouter.delete('/deleteVehicle/:id',authAdmin,deleteVehicle) //delete vehicle
 adminRouter.get('/getVehicle/:id',authAdmin,getVehicle) //get vehicle
 adminRouter.get('/getVehiclebyOwner/:userid',authAdmin,getVehiclebyOwner) //get vehicle by user
+adminRouter.patch('/approveVehicle/:id',authAdmin,approveVehicle)
 
+// statistics
 
+adminRouter.get('/overview',authAdmin,getAdminOverview)
+adminRouter.get('/user-stats',authAdmin,getUserStats)
+adminRouter.get('/vehicle-stats',authAdmin,getVehicleStats)
+adminRouter.get('/vehicle-approval-stats', authAdmin, getVehicleApprovalStats);
 
 module.exports = adminRouter
