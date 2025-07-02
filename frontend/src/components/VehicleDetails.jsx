@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { FaStar, FaRegStar } from "react-icons/fa";
@@ -6,11 +6,25 @@ import { useSelector } from "react-redux";
 
 
 const VehicleDetails = ({ vehicle }) => {
-    const {isLoggedIn} =  useSelector((state)=>state.user)
-    const {bookingData} = useSelector((state)=>state.booking.bookingData)
-    
-    
+    const { isLoggedIn } = useSelector((state) => state.user)
+    const { bookingData } = useSelector((state) => state.booking.bookingData)
     const swiperRef = useRef(null);
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            swiperRef.current?.update();
+        }, 100);
+
+        const handleResize = () => {
+            swiperRef.current?.update();
+        };
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            clearTimeout(timeout);
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [vehicle?._id]);
+
     const {
         brand,
         model,
@@ -32,14 +46,14 @@ const VehicleDetails = ({ vehicle }) => {
         <div className="flex flex-col md:flex-row gap-8 p-6 max-w-6xl mx-auto bg-white shadow rounded-2xl mt-6">
 
 
-            <div className="w-1/2 ">
-                <Swiper spaceBetween={10} slidesPerView={1} onSwiper={(swiper) => { swiperRef.current = swiper }} className="rounded-xl w-auto">
+            <div className="w-full max-w-md ">
+                <Swiper spaceBetween={10} slidesPerView={1} onSwiper={(swiper) => { swiperRef.current = swiper }} className="rounded-xl w-full h-auto">
                     {images.map((img, idx) => (
                         <SwiperSlide key={idx}>
                             <img
                                 src={img}
                                 alt={`Vehicle ${idx + 1}`}
-                                className="object-cover rounded-xl"
+                                className="object-cover rounded-xl w-full h-auto"
                             />
                         </SwiperSlide>
                     ))}
@@ -60,7 +74,7 @@ const VehicleDetails = ({ vehicle }) => {
             </div>
 
 
-            <div className="w-1/2  space-y-4">
+            <div className="w-full md:w-1/2 space-y-4">
                 <h2 className="text-3xl font-bold">{brand} {model} ({year})</h2>
 
 
@@ -79,21 +93,21 @@ const VehicleDetails = ({ vehicle }) => {
                 <p className="text-gray-600">{discription}</p>
 
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-700 mt-4">
-                    <div><span className="font-medium">Fuel:</span> {fuel.toUpperCase()}</div>
-                    <div><span className="font-medium">Transmission:</span> {transmission.toUpperCase()}</div>
-                    <div><span className="font-medium">Driver:</span> {driverAvailable? "Yes" : "No"}</div>
+                    <div><span className="font-medium">Fuel:</span> {fuel?.toUpperCase()}</div>
+                    <div><span className="font-medium">Transmission:</span> {transmission?.toUpperCase()}</div>
+                    <div><span className="font-medium">Driver:</span> {driverAvailable ? "Yes" : "No"}</div>
                     <div><span className="font-medium">Status:</span> {status.toUpperCase()}</div>
-                    
+
                     {location && (
                         <div><span className="font-medium">Location:</span> {location}</div>
                     )}
                 </div>
                 {!isLoggedIn && (
                     <button className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">
-                    Book Now
-                </button>
+                        Book Now
+                    </button>
                 )}
-                
+
             </div>
         </div>
     );

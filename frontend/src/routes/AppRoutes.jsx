@@ -36,6 +36,9 @@ import VehicleLog from '../pages/Host/VehicleLog'
 import AdminLayout from '../Layouts/AdminLayout'
 import AdminDashboard from '../pages/Admin/AdminDashboard'
 import VehicleList from '@/pages/Admin/VehicleList'
+import VehicleLogAdmin from '@/pages/Admin/VehicleLogAdmin'
+import VehicleUpdateAdmin from '@/pages/Admin/UpdateVehicleAdmin'
+import AllOrders from '@/pages/Admin/AllOrders'
 
 
 const router = createBrowserRouter([
@@ -114,9 +117,9 @@ const router = createBrowserRouter([
               {path:'dashboard',element:<AdminDashboard/>},
               {path:'vehicleList', element:<VehicleList/>},
               {path:'addVehicle',element:<AddVehicle/>},
-              {path:'updateVehicle/:id',element:<VehicleUpdate/>},
-              {path:'vehicleLog/:id',element:<VehicleLog/>}
-              
+              {path:'updateVehicle/:id',element:<VehicleUpdateAdmin/>},
+              {path:'vehicleLog/:id',element:<VehicleLogAdmin/>},
+              {path:'allOrders',element:<AllOrders/>}
             ]
           }
         ]

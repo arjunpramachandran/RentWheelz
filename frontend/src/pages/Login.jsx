@@ -44,8 +44,12 @@ const Login = () => {
       email: Yup.string().email('Invalid email address').required('Email is required'),
       password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
     }),
-    onSubmit: (values) => {
-      postData(values);
+    onSubmit: async(values,{setSubmitting}) => {
+      try {
+      await  postData(values);
+      } finally {
+         setSubmitting(false)
+      }
     },
   });
 
