@@ -1,6 +1,6 @@
 const express = require('express')
 const customerRouter = express.Router()
-const {register,login,checkUser, profile,logout,updateProfile,addReview,getAllReviews, deleteMyReview,UpdatePassword, getReviewByVehicle} = require('../controllers/customerController')
+const {register,login,checkUser, profile,logout,updateProfile,addReview,getAllReviews, deleteMyReview,UpdatePassword, getReviewByVehicle, getMyReview} = require('../controllers/customerController')
 const {authUser} = require('../middleware/authMiddleware')
 const { getAllVehicles } = require('../controllers/adminController')
 const { getVehicle } = require('../controllers/vehicleController')
@@ -29,6 +29,7 @@ customerRouter.patch('/updatePassword',authUser,UpdatePassword) //update passwor
 
 customerRouter.post('/review/:vehicleId',authUser, addReview)
 customerRouter.get('/getAllReviews',getAllReviews) //get all reviews
+customerRouter.get('/myReviews',authUser,getMyReview)
 customerRouter.delete('/deleteMyReview/:id',authUser, deleteMyReview) //delete my review
 customerRouter.get('getReviewByVehicle/:vehicleId',authUser,getReviewByVehicle)
 

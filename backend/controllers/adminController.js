@@ -2,62 +2,83 @@ const User = require('../models/User')
 const Vehicle = require('../models/Vehicle')
 const Booking = require('../models/Booking')
 const Review = require('../models/Review')
+const Payment = require('../models/Payment')
 
 
 
 
 
 const deleteUserProfile = async (req, res) => {
-    try {
-        const { id } = req.params
-        const user = await User.findByIdAndDelete(id)
-        if (!user) return res.status(404).json({ message: "User not found" })
-        res.status(200).json({ message: "User deleted successfully" })
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" })
-    }
+  try {
+    const { id } = req.params
+    const user = await User.findByIdAndDelete(id)
+    if (!user) return res.status(404).json({ message: "User not found" })
+    res.status(200).json({ message: "User deleted successfully" })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" })
+  }
 }
 const getAllCustomer = async (req, res) => {
-    try {
-        const users = await User.find({role:"customer"}).select("-password")
-        if (!users) return res.status(404).json({ message: "No users found" }) 
-        res.status(200).json({ message: "Customers retrieved successfully", users })
+  try {
+    const users = await User.find({ role: "customer" }).select("-password")
+    if (!users) return res.status(404).json({ message: "No users found" })
+    res.status(200).json({ message: "Customers retrieved successfully", users })
 
-    
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" })
-        
-    }
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" })
+
+  }
 }
-const getAllHost = async (req, res) => {
-    try {
-        const users = await User.find({role:"host"}).select("-password")
-        if (!users) return res.status(404).json({ message: "No users found" }) 
-        res.status(200).json({ message: "Hosts retrieved successfully", users })
 
-    
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" })
-        
-    }
+const verifyCustomer = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { verified: true },
+      { new: true }
+    );
+    res.status(200).json({ message: 'User verified successfully', user });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to verify customer' });
+  }
+};
+const getAllHost = async (req, res) => {
+  try {
+    const users = await User.find({ role: "host" })
+      .select("-password")
+      .populate({
+        path: 'vehicles',
+        select: 'brand model registrationNumber _id'
+      });
+    if (!users) return res.status(404).json({ message: "No users found" })
+    res.status(200).json({ message: "Hosts retrieved successfully", users })
+
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" })
+
+  }
 }
 
 const getAllVehicles = async (req, res) => {
-    try {
-        const vehicles = await Vehicle.find().populate("ownerId","name email phone")
-        if (!vehicles) return res.status(404).json({ message: "No vehicles found" }) 
-        res.status(200).json({ message: "Vehicles retrieved successfully", vehicles })
+  try {
+    const vehicles = await Vehicle.find().populate("ownerId", "name email phone")
+    if (!vehicles) return res.status(404).json({ message: "No vehicles found" })
+    res.status(200).json({ message: "Vehicles retrieved successfully", vehicles })
 
-    
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" })
-        
-    }
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" })
+
+  }
 }
+
+
 
 const approveVehicle = async (req, res) => {
   try {
@@ -95,31 +116,40 @@ const deleteVehicle = async (req, res) => {
   }
 };
 const getAllReviews = async (req, res) => {
-    try {
-        const reviews = await Review.find()
-        if (!reviews) return res.status(404).json({ message: "No reviews found" }) 
-        res.status(200).json({ message: "Reviews retrieved successfully", reviews })
+  try {
+    const reviews = await Review.find()
+    if (!reviews) return res.status(404).json({ message: "No reviews found" })
+    res.status(200).json({ message: "Reviews retrieved successfully", reviews })
 
-    
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" })
-        
-    }
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" })
+
+  }
 }
 const getAllPayments = async (req, res) => {
-    try {
-        const payments = await Payment.find()
-        if (!payments) return res.status(404).json({ message: "No payments found" }) 
-        res.status(200).json({ message: "Payments retrieved successfully", payments })
+  try {
+    const payments = await Payment.find()
+    .populate('userId' , 'name email')
+    .populate('hostId','name email')
+    .populate({
+      path:'bookingId',
+      populate:{
+        path:'vehicleId',
+        select:'brand model registrationNumber'
+      }
+    })
+    if (!payments) return res.status(404).json({ message: "No payments found" })
+    res.status(200).json({ message: "Payments retrieved successfully", payments })
 
-    
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" })
-        
-    }
-}  
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" })
+
+  }
+}
 
 // Statitics
 
@@ -228,5 +258,45 @@ const getVehicleApprovalStats = async (req, res) => {
 };
 
 
+const getMonthlyIncome = async (req, res) => {
+  try {
+    const incomeData = await Booking.aggregate([
+      {
+        $match: {
+          status: 'completed', // Only consider completed bookings
+        }
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" }
+          },
+          totalIncome: { $sum: "$totalBill" },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 }
+      }
+    ]);
 
-module.exports = { deleteUserProfile ,getAllCustomer,getAllHost,getAllVehicles,approveVehicle,deleteVehicle,getAllReviews,getAllPayments ,getUserStats,getAdminOverview,getVehicleStats,getVehicleApprovalStats}
+   
+    const formatted = incomeData.map(item => ({
+      month: `${item._id.month}-${item._id.year}`,
+      income: item.totalIncome,
+      bookings: item.count
+    }));
+
+    res.status(200).json(formatted);
+  } catch (err) {
+    console.error("Income fetch error:", err);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+
+
+
+
+module.exports = { deleteUserProfile, getAllCustomer,verifyCustomer, getAllHost, getAllVehicles, approveVehicle, deleteVehicle, getAllReviews, getAllPayments, getUserStats,getMonthlyIncome, getAdminOverview, getVehicleStats, getVehicleApprovalStats }

@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ['customer', 'host', 'admin'],
-       default: 'customer'
+        default: 'customer'
     },
 
     licenseNumber: {
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     },
     profilepic: {
         type: String,
-        
+
     },
     licenseProof: {
         type: String
@@ -43,20 +43,26 @@ const userSchema = new mongoose.Schema({
     addressProof: {
         type: String
     },
+    verified: {
+        type: Boolean,
+        default: false,
+    },
 
 },
     {
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
         timestamps: true
     })
+userSchema.virtual('vehicles', {
+    ref: 'Vehicle',
+    localField: '_id',
+    foreignField: 'ownerId'
+})
 userSchema.pre('validate', function (next) {
     if (this.role === 'customer' && !this.licenseNumber) {
         this.invalidate('licenseNumber', 'License number is required for customers');
     }
-
-    // if (this.role !== 'admin' && !this.addressProof) {
-    //     this.invalidate('addressProof', 'Address proof is required for non-admin users');
-    // }
-
     next();
 });
 const User = mongoose.model('User', userSchema);

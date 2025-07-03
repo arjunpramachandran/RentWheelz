@@ -2,7 +2,7 @@ const express = require('express')
 const adminRouter = express.Router()
 const upload = require('../middleware/multer')
 const {authAdmin} = require('../middleware/authMiddleware')
-const {getAllCustomer,getAllHost,getAllVehicles,getAllReviews,getAllPayments,deleteUserProfile, getAdminOverview, getUserStats, getVehicleStats, getVehicleApprovalStats, approveVehicle, deleteVehicle} = require('../controllers/adminController')
+const {getAllCustomer,getAllHost,getAllVehicles,getAllReviews,getAllPayments,deleteUserProfile, getAdminOverview, getUserStats, getVehicleStats, getVehicleApprovalStats, approveVehicle, deleteVehicle, getMonthlyIncome, verifyCustomer} = require('../controllers/adminController')
 const {AddVehicle,updateVehicle,getVehicle,getVehiclebyOwner} = require('../controllers/vehicleController')
 const { getBookingById , getAllBookings, updateBookingStatus, deleteBooking, getBookingByVehicleId} = require('../controllers/bookingController')
 const { checkUser, getReviewByVehicle } = require('../controllers/customerController')
@@ -13,6 +13,7 @@ adminRouter.get('/check-Admin',authAdmin, checkUser )
 adminRouter.delete('/delete/:id',authAdmin,deleteUserProfile) //delete profile
 adminRouter.get('/getAllCustomers',authAdmin,getAllCustomer) //get all customers
 adminRouter.get('/getAllHosts',authAdmin,getAllHost) //get all hosts
+adminRouter.patch('/verify-customer/:id',authAdmin,verifyCustomer)
 
 adminRouter.get('/getAllBookings',authAdmin,getAllBookings) //get all bookings
 adminRouter.get('/getBooking/:id',authAdmin,getBookingById) //get booking by id
@@ -41,5 +42,5 @@ adminRouter.get('/overview',authAdmin,getAdminOverview)
 adminRouter.get('/user-stats',authAdmin,getUserStats)
 adminRouter.get('/vehicle-stats',authAdmin,getVehicleStats)
 adminRouter.get('/vehicle-approval-stats', authAdmin, getVehicleApprovalStats);
-
+adminRouter.get('/income-summary',authAdmin,getMonthlyIncome)
 module.exports = adminRouter

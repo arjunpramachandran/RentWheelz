@@ -255,7 +255,9 @@ const UpdatePassword = async (req, res, next) => {
 }
 const addReview = async (req, res, next) => {
     try {
-        const vehicleId = new mongoose.Types.ObjectId(req.params.id)
+        const {vehicleId} = req.params
+        console.log(vehicleId);
+        
         const userId = req.user.id
         const { rating, comment } = req.body || {}
         if (!rating || !comment) return res.status(400).json({ error: "All Fields are Required" })
@@ -269,7 +271,18 @@ const addReview = async (req, res, next) => {
         res.status(error.status || 500).json({ error: error.message || "Internal Server Message" })
     }
 }
-
+const getMyReview = async (req,res)=>{
+    try {
+    
+        
+    const reviews = await Review.find({ userId: req.user.id }).populate('vehicleId');
+   
+    
+    res.json({ reviews });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch reviews' });
+  }
+}
 const getReviewByVehicle  = async (req,res,next)=>{
     try {
         const {vehicleId} = req.params
@@ -319,4 +332,4 @@ const deleteMyReview = async (req, res) => {
     }
 }
 
-module.exports = { register, login, checkUser, profile, logout, updateProfile, UpdatePassword, addReview,getReviewByVehicle, getAllReviews, deleteMyReview };
+module.exports = { register, login, checkUser, profile, logout, updateProfile, UpdatePassword, addReview,getMyReview,getReviewByVehicle, getAllReviews, deleteMyReview };

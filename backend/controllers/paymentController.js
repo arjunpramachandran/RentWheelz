@@ -24,7 +24,7 @@ const createCheckoutSession = async (req, res) => {
             metadata: {
                 vehicleId,
                 userId,
-               
+                bookingId,
                 pickupDateTime,
                 dropoffDateTime,
                
