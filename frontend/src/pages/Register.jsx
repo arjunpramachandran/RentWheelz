@@ -123,10 +123,10 @@ const Register = ({ role }) => {
             <div className='md:flex gap-4'>
               <div className='flex-1 gap-4 space-y-4'>
                 <div>
-                  <label className="block text-sm font-medium">Name</label>
+                  <label className="block text-sm font-medium ">Name</label>
                   <input
                     name="name"
-                    className="input"
+                    className="input bg-gray-100"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
@@ -142,7 +142,7 @@ const Register = ({ role }) => {
                   <input
                     name="email"
                     type="email"
-                    className="input"
+                    className="input bg-gray-100"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.email}
@@ -158,7 +158,7 @@ const Register = ({ role }) => {
                   <input
                     name="password"
                     type="password"
-                    className="input"
+                    className="input bg-gray-100"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.password}
@@ -174,7 +174,7 @@ const Register = ({ role }) => {
                   <input
                     name="phone"
                     type="tel"
-                    className="input"
+                    className="input bg-gray-100"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.phone}
@@ -188,7 +188,7 @@ const Register = ({ role }) => {
                   <label className="block text-sm font-medium">License Number</label>
                   <input
                     name="licenseNumber"
-                    className="input"
+                    className="input bg-gray-100"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.licenseNumber}
@@ -202,7 +202,7 @@ const Register = ({ role }) => {
                   <label className="block text-sm font-medium">Address Proof ID</label>
                   <input
                     name="addressProofId"
-                    className="input"
+                    className="input bg-gray-100"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.addressProofId}

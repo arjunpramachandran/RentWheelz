@@ -31,7 +31,7 @@ const cancelBooking = async (bookingid) => {
         setLoading(false);
     }
 }
-const BookingCard = ({ booking }) => (
+const BookingCard = ({ booking ,openReviewModal}) => (
 
     <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-2 border border-gray-100 hover:shadow-lg transition">
         <div className="flex justify-between items-center mb-2">
@@ -66,13 +66,13 @@ const BookingCard = ({ booking }) => (
         </div>
 
         <div className="text-center mt-3 space-x-2">
-            {booking.status !== ('completed','cancelled') && (
+            {(booking.status !== 'completed' && booking.status!=='cancelled') && (
                 <button onClick={() => cancelBooking(booking._id)} className="btn bg-red-500 text-white">
                     Cancel Booking
                 </button>
             )}
 
-            {booking.status === 'completed' && !booking.reviewed && (
+            {openReviewModal && booking.status === 'completed'  && (
                 <button onClick={() => openReviewModal(booking.vehicleId)} className="btn bg-yellow-500 text-white">
                     Leave a Review
                 </button>

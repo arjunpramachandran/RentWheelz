@@ -93,7 +93,7 @@ const UpdateProfileHost = () => {
       if (userData.role === 'host') {
         navigate('/host/dashboard');
       } else if (userData.role === 'admin') {
-        navigate('/admin/adminDashboard');
+        navigate('/admin/dashboard');
       } else {
         navigate('/user/userDashboard');
       }

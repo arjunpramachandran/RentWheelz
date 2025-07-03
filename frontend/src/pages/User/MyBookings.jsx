@@ -38,8 +38,9 @@ const handleSubmitReview = async () => {
       alert("Please provide rating and comment.");
       return;
     }
+console.log(selectedVehicleId._id);
 
-    await api.post(`/user/review/${selectedVehicleId}`, {
+    await api.post(`/user/review/${selectedVehicleId._id}`, {
       rating,
       comment
     });

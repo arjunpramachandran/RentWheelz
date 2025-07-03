@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../config/axiosinstance';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveUser } from '../../app/features/user/userSlice';
-
+import { toast } from 'react-hot-toast';
 
 const UpdateProfile = () => {
   const { userData } = useSelector((state) => state.user)
@@ -18,11 +18,11 @@ const UpdateProfile = () => {
   const [addressPreview, setAddressPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  
-  
+
+
   const [isLoadingPass, setIsLoadingPass] = useState(false);
   const [errorPass, setErrorPass] = useState(null);
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -87,13 +87,14 @@ const UpdateProfile = () => {
         },
         withCredentials: true
       });
-      alert('Profile Updated Successfully!');
-      console.log('Response:', res.data);
+     
+     
       dispatch(saveUser(res.data?.updatedUser))
+      toast.success("Profile Updated Successfully");
       if (userData.role === 'host') {
         navigate('/host/dashboard');
       } else if (userData.role === 'admin') {
-        navigate('/admin/adminDashboard');
+        navigate('/admin/dashboard');
       } else {
         navigate('/user/userDashboard');
       }
@@ -101,7 +102,7 @@ const UpdateProfile = () => {
     } catch (error) {
       console.error(error.response?.data || error.message);
       setError(error.response?.data?.error || 'Update Failed');
-
+      toast.error({error})
     } finally {
       setIsLoading(false)
     }
@@ -109,17 +110,17 @@ const UpdateProfile = () => {
   }
 
 
-  const handlePass = async(values)=>{
+  const handlePass = async (values) => {
     try {
-      
+
       setIsLoadingPass(true)
-     
-      
-       const res = await api({
+
+
+      const res = await api({
         method: "PATCH",
         url: "/user/updatePassword",
         data: values,
-        
+
         withCredentials: true
       });
 
@@ -127,7 +128,7 @@ const UpdateProfile = () => {
       if (userData.role === 'host') {
         navigate('/host/dashboard');
       } else if (userData.role === 'admin') {
-        navigate('/admin/adminDashboard');
+        navigate('/admin/dashboard');
       } else {
         navigate('/user/userDashboard');
       }
@@ -181,7 +182,7 @@ const UpdateProfile = () => {
         .min(8, 'Password must be at least 8 characters')
         .max(128, 'Password must be less than 128 characters')
         .required('Password is required'),
-      newpassword:Yup.string()
+      newpassword: Yup.string()
         .min(8, 'Password must be at least 8 characters')
         .max(128, 'Password must be less than 128 characters')
         .required('Password is required'),
@@ -189,9 +190,9 @@ const UpdateProfile = () => {
         .oneOf([Yup.ref('newpassword')], 'Passwords must match')
         .required('Confirm password is required'),
     }),
-    validateOnChange:true,
+    validateOnChange: true,
 
-    onSubmit:(values)=>{handlePass(values)}
+    onSubmit: (values) => { handlePass(values) }
   })
 
 
@@ -233,34 +234,38 @@ const UpdateProfile = () => {
                     <p className="text-red-500 text-sm">{formik.errors.phone}</p>
                   )}
                 </div>
+                {userData?.role ==='customer' &&(
+                  <div>
+                    <label className="block text-sm font-medium">License Number</label>
+                    <input
+                      name="licenseNumber"
+                      className="input"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.licenseNumber}
+                    />
+                    {formik.touched.licenseNumber && formik.errors.licenseNumber && (
+                      <p className="text-red-500 text-sm">{formik.errors.licenseNumber}</p>
+                    )}
+                  </div>
+                )}
 
-                <div>
-                  <label className="block text-sm font-medium">License Number</label>
-                  <input
-                    name="licenseNumber"
-                    className="input"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.licenseNumber}
-                  />
-                  {formik.touched.licenseNumber && formik.errors.licenseNumber && (
-                    <p className="text-red-500 text-sm">{formik.errors.licenseNumber}</p>
-                  )}
-                </div>
+                {userData.role !== 'admin' &&(
+                  <div>
+                    <label className="block text-sm font-medium">Address Proof ID</label>
+                    <input
+                      name="addressProofId"
+                      className="input"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.addressProofId}
+                    />
+                    {formik.touched.addressProofId && formik.errors.addressProofId && (
+                      <p className="text-red-500 text-sm">{formik.errors.addressProofId}</p>
+                    )}
+                  </div>
+                )}
 
-                <div>
-                  <label className="block text-sm font-medium">Address Proof ID</label>
-                  <input
-                    name="addressProofId"
-                    className="input"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.addressProofId}
-                  />
-                  {formik.touched.addressProofId && formik.errors.addressProofId && (
-                    <p className="text-red-500 text-sm">{formik.errors.addressProofId}</p>
-                  )}
-                </div>
 
 
 
@@ -289,47 +294,54 @@ const UpdateProfile = () => {
 
                 {/* Address Proof */}
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">Address Proof</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleFileChange(e, 'addressProof')}
-                    className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
+                {userData.role !== 'admin'&&(
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Address Proof</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e, 'addressProof')}
+                      className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0 file:text-sm file:font-semibold
                    file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
-                  />
-                  {addressPreview && (
-                    <img
-                      src={addressPreview}
-                      alt="Preview"
-                      className="mt-2 w-32 h-32 rounded-full object-cover shadow border"
                     />
-                  )}
-                </div>
+                    {addressPreview && (
+                      <img
+                        src={addressPreview}
+                        alt="Preview"
+                        className="mt-2 w-32 h-32 rounded-full object-cover shadow border"
+                      />
+                    )}
+                  </div>
+                )}
+
 
 
 
                 {/* License Proof */}
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">License Proof</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleFileChange(e, 'licenseProof')}
-                    className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
+                {userData?.role === 'customer'&&(
+                  <div>
+                    <label className="block text-sm font-medium mb-1">License Proof</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e, 'licenseProof')}
+                      className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0 file:text-sm file:font-semibold
                    file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
-                  />
-                  {licensePreview && (
-                    <img
-                      src={licensePreview}
-                      alt="Preview"
-                      className="mt-2 w-32 h-32 rounded-full object-cover shadow border"
                     />
-                  )}
-                </div>
+                    {licensePreview && (
+                      <img
+                        src={licensePreview}
+                        alt="Preview"
+                        className="mt-2 w-32 h-32 rounded-full object-cover shadow border"
+                      />
+                    )}
+                  </div>
+                )}
+
+
 
 
 

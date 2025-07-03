@@ -6,7 +6,7 @@ import { savedBooking } from '../app/features/user/bookingSlice'
 
 const BookingForm = () => {
   const { userData, isLoggedIn } = useSelector((state) => state.user)
-  console.log(userData, isLoggedIn);
+  
   const [error, setError] = useState()
 
   const navigate = useNavigate()

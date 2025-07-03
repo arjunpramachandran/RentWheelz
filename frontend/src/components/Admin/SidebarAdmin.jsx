@@ -11,9 +11,9 @@ const links = [
   { name: 'All Vehicles', path: '/admin/vehicleList' },
   { name: 'Add Vehicle', path: '/admin/addVehicle' },
   { name: 'All Orders', path: '/admin/allOrders' },
-  { name: 'All Host', path: '/host/myOrders' },
-  { name: 'All Customers', path: '/host/myOrders' },
-  { name: 'All Payments', path: '/reviews' },
+  { name: 'All Host', path: '/admin/allHosts' },
+  { name: 'All Customers', path: '/admin/allCustomers' },
+  { name: 'All Payments', path: '/admin/allPayments' },
 ];
 
 const SidebarAdmin = () => {
@@ -25,7 +25,7 @@ const SidebarAdmin = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
   const updateProfile = () => {
     setIsOpen(false);
-    navigate('/host/updateProfile');
+    navigate('/admin/updateProfile');
   };
 
   return (

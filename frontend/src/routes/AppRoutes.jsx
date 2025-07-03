@@ -39,6 +39,10 @@ import VehicleList from '@/pages/Admin/VehicleList'
 import VehicleLogAdmin from '@/pages/Admin/VehicleLogAdmin'
 import VehicleUpdateAdmin from '@/pages/Admin/UpdateVehicleAdmin'
 import AllOrders from '@/pages/Admin/AllOrders'
+import UserReviews from '@/pages/User/UserReview'
+import AllHosts from '@/pages/Admin/AllHosts'
+import AllPayments from '@/pages/Admin/AllPayments'
+import AllCustomers from '@/pages/Admin/AllCustomers'
 
 
 const router = createBrowserRouter([
@@ -68,7 +72,9 @@ const router = createBrowserRouter([
               { path: 'userBooking', element: <UserBooking /> },
               { path: 'vehicleBooking/:id', element: <VehicleBooking /> },
               { path: 'payment-success', element: <PaymentSuccess /> },
-              {path:'my-bookings',element:<MyBookings/>}
+              {path:'my-bookings',element:<MyBookings/>},
+              {path:'myReviews',element:<UserReviews/>}
+              
             ]
 
 
@@ -119,7 +125,12 @@ const router = createBrowserRouter([
               {path:'addVehicle',element:<AddVehicle/>},
               {path:'updateVehicle/:id',element:<VehicleUpdateAdmin/>},
               {path:'vehicleLog/:id',element:<VehicleLogAdmin/>},
-              {path:'allOrders',element:<AllOrders/>}
+              {path:'allOrders',element:<AllOrders/>},
+              {path:'allhosts',element:<AllHosts/>},
+              {path:'allPayments', element:<AllPayments/>},
+              {path:'updateProfile',element:<UpdateProfile/>},
+              {path:'allCustomers',element:<AllCustomers/>}
+
             ]
           }
         ]
