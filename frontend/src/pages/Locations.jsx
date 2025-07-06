@@ -64,7 +64,7 @@ const Locations = () => {
               <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
                 {place.cars.map((car, i) => (
                   <li key={i} className="flex items-center gap-2">
-                    <a href={car.path}><FaCarSide className="text-cyan-500" />
+                    <a href={car.path} className='flex flex-row items-center gap-2'><FaCarSide className="text-cyan-500" />
                       {car.car}
                     </a>
                   </li>
