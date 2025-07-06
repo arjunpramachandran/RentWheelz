@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <div>
 
-      <footer className="footer font-Montserrat px-30 sm:footer-horizontal bg-base-200 text-base-content p-10 justify-between w-full ">
+      <footer className="footer dark:bg-gray-900 dark:text-white font-Montserrat px-30 sm:footer-horizontal bg-base-200 text-base-content p-10 justify-between w-full ">
         <nav className='font-semibold'>
           <h6 className="footer-title">Services</h6>
           <a className="link  link-hover">Car Rental</a>
@@ -26,7 +26,7 @@ const Footer = () => {
           <a className="link link-hover">Cookie policy</a>
         </nav>
       </footer>
-      <footer className="footer font-Montserrat bg-base-200 text-base-content border-base-300 border-t px-10 py-4">
+      <footer className="footer dark:bg-gray-900 dark:text-white font-Montserrat bg-base-200 text-base-content border-base-300 border-t px-10 py-4">
         <div className='flex flex-col md:flex-row justify-between items-center w-full gap-6 text-center md:text-left'>
           <div className="flex-1 text-center min-w-[200px] p-6">
             <h4 className='text-2xl font-Montserrat font-bold  text-gray-600'>About Us</h4>

@@ -1,14 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { use, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 const VehicleDetails = ({ vehicle }) => {
     const { isLoggedIn } = useSelector((state) => state.user)
     const { bookingData } = useSelector((state) => state.booking.bookingData)
     const swiperRef = useRef(null);
+    const navigate = useNavigate();
     useEffect(() => {
         const timeout = setTimeout(() => {
             swiperRef.current?.update();
@@ -39,8 +41,8 @@ const VehicleDetails = ({ vehicle }) => {
         rateOfDriver,
         location,
         rating = 4,
-    } = vehicle;
-    console.log(vehicle);
+    } = vehicle.vehicle;
+    console.log(vehicle.vehicle);
 
     return (
         <div className="flex flex-col md:flex-row gap-8 p-6 max-w-6xl mx-auto bg-white shadow rounded-2xl mt-6">
@@ -103,7 +105,7 @@ const VehicleDetails = ({ vehicle }) => {
                     )}
                 </div>
                 {!isLoggedIn && (
-                    <button className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">
+                    <button onClick={() => {navigate('/login')}} className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">
                         Book Now
                     </button>
                 )}
