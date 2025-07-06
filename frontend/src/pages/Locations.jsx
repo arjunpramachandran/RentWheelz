@@ -5,7 +5,7 @@ import { FaMapMarkerAlt, FaCarSide } from 'react-icons/fa';
 const attractions = [
   {
     name: 'Munnar',
-    image: './public/WEb/munnar.jpg',
+    image: './WEb/munnar.jpg',
     description: 'A hill station with tea gardens, cool climate, and lush greenery.',
     cars: [
       { car: 'Mahindra Thar', path: '#' },
@@ -15,7 +15,7 @@ const attractions = [
   },//'Mahindra Thar', 'Toyota Innova', 'Maruti Swift'
   {
     name: 'Alleppey',
-    image: './public/WEb/Allepy.jpg',
+    image: './WEb/Allepy.jpg',
     description: 'Known for its backwaters, houseboats, and serene lakes.',
     cars: [
       { car: 'Maruti Suzuki Ertiga', path: '#' },
@@ -25,7 +25,7 @@ const attractions = [
   },
   {
     name: 'Wayanad',
-    image: './public/WEb/Wayanad.jpg',
+    image: './WEb/Wayanad.jpg',
     description: 'Forests, wildlife, waterfalls, and trekking destinations.',
     cars: [
       { car: 'Jeep Compass', path: '#' },
@@ -35,7 +35,7 @@ const attractions = [
   },
   {
     name: 'Kochi',
-    image: './public/WEb/Kochi.jpg',
+    image: './WEb/Kochi.jpg',
     description: 'A blend of modern city life and colonial history.',
     cars: [
       { car: 'Maruti Baleno', path: '#' },
