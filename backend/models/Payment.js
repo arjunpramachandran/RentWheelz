@@ -18,7 +18,7 @@ const paymentSchema = new mongoose.Schema({
     },
   paymentMethod: {
      type: String, enum: ['card', 'upi', 'wallet'], 
-     required: true 
+     default: 'card'
     },
   status: {
      type: String, enum: ['success', 'failed', 'refunded'],

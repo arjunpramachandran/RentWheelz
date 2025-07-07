@@ -1,8 +1,9 @@
-const stripe = require('../config/stripe')
+const stripe = require('../config/stripe');
+const Payment = require('../models/Payment');
 
 const createCheckoutSession = async (req, res) => {
     try {
-        const {vehicleId, vehicleBrand,VehicleModel,  pickupDateTime, dropoffDateTime, totalBill ,bookingId } = req.body;
+        const {vehicleId, vehicleBrand,vehicleModel,  pickupDateTime, dropoffDateTime, totalBill ,bookingId } = req.body;
         const userId = req.user.id;
 
         
@@ -14,7 +15,7 @@ const createCheckoutSession = async (req, res) => {
                 price_data: {
                     currency: 'inr',
                     product_data: {
-                        name: `Booking for Vehicle ${vehicleBrand} ${VehicleModel}`,
+                        name: `Booking for Vehicle ${vehicleBrand} ${vehicleModel}`,
                         description: `From ${pickupDateTime} to ${dropoffDateTime}`,
                     },
                     unit_amount: Math.round(totalBill * 100), 
@@ -56,4 +57,27 @@ const getStripeSession = async (req, res) => {
     res.status(500).json({ error: "Failed to retrieve session" });
   }
 };
-module.exports={createCheckoutSession ,getStripeSession}
+
+//this controller handle the payment db storage
+const handlePayment = async (req, res) => {
+    const { bookingId, userId, hostId, amount, paymentMethod, status, transactionId } = req.body;
+
+    try {
+        const payment = new Payment({
+            bookingId,
+            userId,
+            hostId,
+            amount,
+            paymentMethod,
+            status,
+            transactionId
+        });
+
+        await payment.save();
+        res.status(201).json({ message: "Payment recorded successfully", payment });
+    } catch (error) {
+        console.error('Error recording payment:', error);
+        res.status(500).json({ error: "Failed to record payment" });
+    }
+};
+module.exports={createCheckoutSession ,getStripeSession, handlePayment}

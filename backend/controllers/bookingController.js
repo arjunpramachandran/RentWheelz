@@ -1,4 +1,5 @@
-const Booking = require('../models/Booking')
+const Booking = require('../models/Booking');
+const Payment = require('../models/Payment');
 const Vehicle = require('../models/Vehicle');
 const mongoose = require('mongoose')
 const createBooking = async (req, res) => {
@@ -236,7 +237,24 @@ const updateBookingStatus = async (req, res) => {
             return res.status(404).json({ error: 'Booking not found' });
         }
 
-        res.status(200).json({ message: 'Booking status updated successfully', booking: updatedBooking });
+        const updatedPayment = await Payment.findOneAndUpdate(
+            { bookingId: id },
+            {
+                transactionId: paymentId,
+                status: status === 'cancelled' ? 'failed' : 'success'
+            },
+            { new: true }
+        );
+
+        if (!updatedPayment) {
+            return res.status(404).json({ error: 'Payment record not found for booking' });
+        }
+
+        res.status(200).json({
+            message: 'Booking and Payment status updated successfully',
+            booking: updatedBooking,
+            payment: updatedPayment,
+        });
 
     } catch (error) {
         console.error('Error updating booking status:', error);
