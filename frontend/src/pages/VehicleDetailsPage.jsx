@@ -11,7 +11,7 @@ const VehicleDetailsPage = () => {
     const fetchVehicle = async () => {
       try {
         const res = await api.get(`user/getVehicle/${id}`);
-        setVehicle(res.data);
+        setVehicle(res.data?.vehicle);
         
         
       } catch (err) {

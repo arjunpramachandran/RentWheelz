@@ -11,6 +11,7 @@ const VehicleDetails = ({ vehicle }) => {
     const { bookingData } = useSelector((state) => state.booking.bookingData)
     const swiperRef = useRef(null);
     const navigate = useNavigate();
+   
     useEffect(() => {
         const timeout = setTimeout(() => {
             swiperRef.current?.update();
@@ -41,8 +42,9 @@ const VehicleDetails = ({ vehicle }) => {
         rateOfDriver,
         location,
         rating = 4,
-    } = vehicle.vehicle;
-    console.log(vehicle.vehicle);
+    } = vehicle;
+   
+
 
     return (
         <div className="flex flex-col md:flex-row gap-8 p-6 max-w-6xl mx-auto bg-white shadow rounded-2xl mt-6">

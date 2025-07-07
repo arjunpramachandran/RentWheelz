@@ -15,7 +15,7 @@ const BookingReviewModal = ({ booking, onConfirm, onCancel }) => {
     vehicle
   } = booking;
 
-  return (
+  return (    
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white rounded-lg shadow-lg max-w-xl w-full p-6">
         <h2 className="text-2xl font-semibold mb-4 text-center">Review Your Booking</h2>

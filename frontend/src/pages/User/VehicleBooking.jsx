@@ -9,6 +9,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { FaSmile, FaSadTear } from "react-icons/fa";
 
 import ModalDialog from '../../components/Modal';
+import BookingReviewModal from '@/components/BookingReviewModal';
+import { set } from 'date-fns';
 
 
 const VehicleBooking = () => {
@@ -19,9 +21,20 @@ const VehicleBooking = () => {
     const [baseCost, setBaseCost] = useState(0)
     const [driverCost, setDriverCost] = useState(0)
     const [totalCost, setTotalCost] = useState(0)
-    const [bookingId, setBookingId] = useState();
-
-
+    const [booking, setBooking] = useState();
+    const [showPaymentReview, setShowPaymentReview] = useState(false);
+    const [bookingReviewData, setBookingReviewData] = useState({
+      pickupLocation: '',
+      pickupDateTime: '',
+      dropoffDateTime: '',
+      address: '',
+      totalBill: 0,
+      driverRequired: false,
+      totalDays: 0,
+      baseCost: 0,
+      driverCost: 0,
+      vehicle: null
+    });
 
     const navigate = useNavigate()
 
@@ -77,7 +90,7 @@ const VehicleBooking = () => {
 
 
     const bookingData = useSelector((state) => state.booking.bookingData);
-   
+
     const [formData, setFormData] = useState({
         vehicleId: id,
         pickupLocation: bookingData.pickupLocation,
@@ -97,50 +110,69 @@ const VehicleBooking = () => {
     };
 
     const handleSubmit = async (e) => {
+
+        e.preventDefault();
+
+        setBookingReviewData({
+            pickupLocation: formData.pickupLocation,
+            pickupDateTime: formData.pickupDateTime,
+            dropoffDateTime: formData.dropoffDateTime,
+            address: formData.address,
+            totalBill: totalCost,
+            driverRequired: formData.driverRequired,
+            totalDays,
+            baseCost,
+            driverCost,
+            vehicle
+        });
+
+        setShowPaymentReview(true);
+
+    }
+    const handlePaymentAndBooking = async () => {
+     
         try {
-            e.preventDefault();
             formData.driverRequired = isDriverRequired;
             formData.totalBill = totalCost
-            
-
             const res = await api.post(`/user/createBooking/${id}`, formData, {
                 withCredentials: true
             })
 
             const bookid = res.data?.booking?._id;
-            
-            
+
+
+
+            if (!bookid) {
+                throw new Error('Booking ID not found in response');
+            }
+
+            setBooking(res.data?.booking);
+           
+
 
             const checkoutData = {
-                vehicleId:id,
+                vehicleId: id,
                 vehicleBrand: vehicle.brand,
                 vehicleModel: vehicle.model,
                 pickupDateTime: bookingData.pickupDateTime,
                 dropoffDateTime: bookingData.dropoffDateTime,
-                totalBill : totalCost,
-                bookingId : bookid
+                totalBill: totalCost,
+                bookingId: bookid
             }
             console.log(checkoutData);
-            
-            if (res) {
-                try {
-                    const response = await api.post('user/create-checkout-session', checkoutData, { withCredentials: true });
-                    const stripe = await stripePromise;
-                    await stripe.redirectToCheckout({ sessionId: response.data.id });
+
+            const response = await api.post('user/create-checkout-session', checkoutData, { withCredentials: true });
+            const stripe = await stripePromise;
+            await stripe.redirectToCheckout({ sessionId: response.data.id });
 
 
-                } catch (error) {
-                    console.error('Stripe Error:', error);
-                    alert('Failed to initiate payment');
-                }
-            }
+
 
         } catch (error) {
-            console.log('Vehicle Booking Error:', error?.response?.data || error.message);
-            alert(error?.response?.data?.error || 'Failed to Booking Vehicle');
+            console.error('Payment Error:', error?.response?.data || error.message);
+            alert(error?.response?.data?.error || 'Failed to process payment');
+
         }
-
-
     }
 
     const getCurrentDateTime = () => {
@@ -184,18 +216,18 @@ const VehicleBooking = () => {
         }
     }
     useEffect(() => {
-       
-      
+
+
 
         const fetchSession = async () => {
-            if ( !sessionId) return;
+            if (!sessionId) return;
 
             try {
                 const res = await api.get(`/user/retrieve-checkout-session/${sessionId}`, {
                     withCredentials: true,
                 });
                 console.log(res);
-                
+
                 const paymentId = res.data?.payment_intent;
                 if ((isSuccess || isCanceled)) {
 
@@ -348,7 +380,16 @@ const VehicleBooking = () => {
 
                     {/* payment review modal */}
 
-
+                    {showPaymentReview && (
+                        <BookingReviewModal
+                            booking={bookingReviewData}
+                            onConfirm={() => {
+                                handlePaymentAndBooking();
+                                setShowPaymentReview(false);
+                            }}
+                            onCancel={() => setShowPaymentReview(false)}
+                        />
+                    )}
                 </div>
 
             </div>
