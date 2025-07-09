@@ -1,3 +1,6 @@
+import React, { useState, useEffect } from 'react';
+import {api} from '../../config/axiosinstance';
+import toast from 'react-hot-toast';
 const getStatusColor = (status) => {
     switch (status) {
         case 'pending':
@@ -18,20 +21,10 @@ const formatDateTime = (datetime) => {
         timeStyle: 'short',
     });
 };
-const cancelBooking = async (bookingid) => {
 
-    try {
-        const response = await api.patch(`/user/cancelMyBooking/${bookingid}`, { withCredentials: true });
-        console.log(response);
-        fetchBookings()
 
-    } catch (error) {
-        console.error('Failed to load bookings:', error);
-    } finally {
-        setLoading(false);
-    }
-}
-const BookingCard = ({ booking ,openReviewModal}) => (
+    
+const BookingCard = ({ booking ,openReviewModal ,onCancel}) => (
 
     <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-2 border border-gray-100 hover:shadow-lg transition">
         <div className="flex justify-between items-center mb-2">
@@ -67,7 +60,7 @@ const BookingCard = ({ booking ,openReviewModal}) => (
 
         <div className="text-center mt-3 space-x-2">
             {(booking.status !== 'completed' && booking.status!=='cancelled') && (
-                <button onClick={() => cancelBooking(booking._id)} className="btn bg-red-500 text-white">
+                <button onClick={() => onCancel?.(booking._id)} className="btn bg-red-500 text-white">
                     Cancel Booking
                 </button>
             )}

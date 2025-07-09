@@ -88,8 +88,8 @@ const Review = () => {
 
 
     return (
-        <section className="py-10 bg-gray-100 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">What They Say</h2>
+        <section className="py-10 bg-gray-100 text-center dark:bg-gray-800 dark:text-white">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-violet-900 mb-6">What They Say</h2>
             <p className="text-lg text-gray-600 mb-12">
                 Hear from our customers and partners about their experience
             </p>
@@ -109,7 +109,7 @@ const Review = () => {
                 >
                     {reviews.map((t, index) => (
                         <SwiperSlide key={index}>
-                            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 h-full flex flex-col items-center text-left">
+                            <div className="bg-white dark:bg-indigo-900  p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition duration-300 h-full flex flex-col items-center text-left">
                                 {t.avatar ? (
                                     <img
                                         src={t.avatar}
@@ -117,12 +117,12 @@ const Review = () => {
                                         className="w-14 h-14 rounded-full mb-4 object-cover"
                                     />
                                 ) : (
-                                    <div className="w-14 h-14 rounded-full bg-emerald-500 text-white flex items-center justify-center mb-4 text-xl font-bold">
+                                    <div className="w-14 h-14 rounded-full bg-emerald-500  text-white flex items-center justify-center mb-4 text-xl font-bold">
                                         {t.name.charAt(0)}
                                     </div>
                                 )}
 
-                                <div className="text-amber-500 text-base mb-2 flex">
+                                <div className="text-amber-500 text-base mb-2 flex ">
                                     {Array.from({ length: 5 }, (_, i) => {
                                         const full = i + 1 <= Math.floor(t.rating);
                                         const half = i < t.rating && i + 1 > t.rating;

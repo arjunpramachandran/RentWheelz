@@ -3,7 +3,7 @@ import { api } from '../../config/axiosinstance';
 import Loader from '../../components/Loader';
 import { useParams } from 'react-router-dom';
 import BookingCard from '../../components/user/BookingCard';
-
+import { toast } from 'react-hot-toast';
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -25,6 +25,20 @@ const MyBookings = () => {
       setLoading(false);
     }
   };
+  const cancelBooking = async (bookingId) => {
+  try {
+    const confirm = window.confirm("Are you sure you want to cancel this booking?");
+    if (!confirm) return;
+
+    await api.patch(`/user/cancelMyBooking/${bookingId}`, {}, { withCredentials: true });
+    toast.success('Booking cancelled successfully');
+    fetchBookings(); 
+  } catch (error) {
+    console.error('Failed to cancel booking:', error);
+    toast.error('Failed to cancel booking');
+  }
+};
+
 
   const openReviewModal = (vehicleId) => {
     setSelectedVehicleId(vehicleId);
@@ -47,7 +61,7 @@ console.log(selectedVehicleId._id);
 
     setShowReviewModal(false);
     alert("Review submitted successfully.");
-    // Optionally refresh bookings/reviews
+   
   } catch (error) {
     console.error("Failed to submit review:", error);
     alert(error.response?.data?.error || "Error submitting review");
@@ -79,7 +93,7 @@ console.log(selectedVehicleId._id);
             <div>
               <h2 className="text-xl font-semibold text-green-700 mb-4">Upcoming Rides</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {confirmed.map((booking) => <BookingCard key={booking._id} booking={booking} />)}
+                {confirmed.map((booking) => <BookingCard key={booking._id} booking={booking} onCancel={cancelBooking} />)}
               </div>
             </div>
           )}
@@ -109,7 +123,7 @@ console.log(selectedVehicleId._id);
             <div>
               <h2 className="text-xl font-semibold text-yellow-800 mb-4">Pending Rides</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {pending.map((booking) => <BookingCard key={booking._id} booking={booking} />)}
+                {pending.map((booking) => <BookingCard key={booking._id} booking={booking} onCancel={cancelBooking}/>)}
               </div>
             </div>
           )}

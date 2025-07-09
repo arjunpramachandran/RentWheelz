@@ -118,7 +118,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="container mx-auto h-full relative">
+    <div className="dark:bg-gray-900 dark:text-white container mx-auto h-full relative">
       <div className="carousel w-full relative overflow-hidden">
 
         <img
@@ -152,7 +152,7 @@ const Home = () => {
       <div className='  rounded-2xl  flex justify-center items-center mt-10'>
         <BookingForm />
       </div>
-      <div className="top-50 mt-10 p-4 text-center rounded-lg border-t-2 border-gray-100 shadow-lg">
+      <div className="top-50 mt-10 p-4 dark:text-amber-50 dark:bg-cyan-950 text-center rounded-lg border-t-2 border-gray-100 shadow-lg">
         <h2 className="text-3xl md:text-4xl font-bold  mb-6">How It Works</h2>
 
         <p className="text-lg ">
@@ -190,15 +190,15 @@ const Home = () => {
 
 
       <div className="top-50 mt-10 p-4 text-center rounded-lg border-t-2 border-gray-100 shadow-lg">
-        <section className="py-16 bg-gray-50 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800  mb-6">Our Services</h2>
+        <section className="py-16 bg-gray-50 text-center dark:bg-gray-800 ">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-blue-200  mb-6">Our Services</h2>
           <p className="text-lg text-gray-600 mb-12">Explore the services we offer to make your ride easy and enjoyable</p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-4 gap-8 max-w-6xl mx-auto px-4">
             {services.map((service, index) => (
               <div
                 key={index}
-                className="bg-white shadow-md shadow-emerald-800 hover:shadow-2xl hover:border-b-emerald-700 hover:border-2 transition duration-300 rounded-xl p-6 border border-gray-100"
+                className="bg-white shadow-md dark:bg-lime-950 dark:text-green-50 shadow-emerald-800 hover:shadow-2xl hover:border-b-emerald-700 hover:border-2 transition duration-300 rounded-xl p-6 border border-gray-100"
               >
                 {service.icon}
                 <h3 className="text-xl font-semibold text-gray-700 mb-2">{service.title}</h3>
@@ -210,9 +210,9 @@ const Home = () => {
       </div>
       <div className="top-50 mt-10 p-4 text-center rounded-lg border-t-2 border-gray-100 shadow-lg">
 
-        <section className="py-16 bg-white text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Why Choose Us</h2>
-          <p className="text-lg text-gray-600 mb-12">
+        <section className="py-16 bg-white dark:bg-teal-950 dark:text-white text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-6">Why Choose Us</h2>
+          <p className="text-lg text-gray-600 dark:text-white mb-12">
             We go beyond just renting — we ensure your satisfaction, safety, and convenience.
           </p>
 
@@ -220,7 +220,7 @@ const Home = () => {
             {reasons.map((reason, index) => (
               <div
                 key={index}
-                className="bg-gray-50 flex items-start gap-4 shadow-cyan-500 hover:shadow-md transition-all duration-300 p-6 rounded-xl border-t-4 border-emerald-500 border-b-4 "
+                className="bg-gray-50 flex dark:bg-orange-950 dark:text-gray-50 items-start gap-4 shadow-cyan-500 hover:shadow-md transition-all duration-300 p-6 rounded-xl border-t-4 border-emerald-500 border-b-4 "
               >
                 <div className="pt-3">{reason.icon}</div>
                 <div className='text-start'>
