@@ -114,10 +114,10 @@ const HostRegister = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-100 to-cyan-100 p-4">
+    <div className="dark:bg-gradient-to-br dark:from-green-700 dark:to-cyan-700 min-h-screen flex items-center justify-center bg-gradient-to-r from-green-100 to-cyan-100 p-4">
 
-      <div className="max-w-3xl  w-full bg-white shadow-md rounded-xl p-8">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Create an Account For Host</h2>
+      <div className="dark:bg-amber-950 max-w-3xl  w-full bg-white shadow-md rounded-xl p-8">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-100">Create an Account For Host</h2>
         <div className="space-y-4">
           <form onSubmit={formik.handleSubmit} className="space-y-4 ">
             <div className='md:flex gap-4'>
@@ -126,7 +126,7 @@ const HostRegister = () => {
                   <label className="block text-sm font-medium">Name</label>
                   <input
                     name="name"
-                    className="input"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white "
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
@@ -142,7 +142,7 @@ const HostRegister = () => {
                   <input
                     name="email"
                     type="email"
-                    className="input"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.email}
@@ -158,7 +158,7 @@ const HostRegister = () => {
                   <input
                     name="password"
                     type="password"
-                    className="input"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.password}
@@ -174,7 +174,7 @@ const HostRegister = () => {
                   <input
                     name="phone"
                     type="tel"
-                    className="input"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.phone}
@@ -188,7 +188,7 @@ const HostRegister = () => {
                     <label className="block text-sm font-medium">License Number</label>
                     <input
                       name="licenseNumber"
-                      className="input"
+                      className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.licenseNumber}
@@ -203,7 +203,7 @@ const HostRegister = () => {
                     <label className="block text-sm font-medium">Address Proof ID</label>
                     <input
                       name="addressProofId"
-                      className="input"
+                      className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.addressProofId}

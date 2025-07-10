@@ -72,10 +72,10 @@ const BookingForm = () => {
           </div>
         
           <div className='w-64'>
-            <label className=" block text-sm font-medium pt-2 text-gray-700 mb-1">
+            <label className=" block text-sm font-medium pt-2 text-gray-700 mb-1 ">
               Pickup Date and Time
             </label>
-            <input type="datetime-local" className="w-full input"
+            <input type="datetime-local" className="w-full input dark:bg-gray-800 dark:text-white"
               name="pickupDateTime"
               placeholder={formData.pickupDateTime ? formData.pickupDateTime : ''}
               value={formData.pickupDateTime}
@@ -89,7 +89,7 @@ const BookingForm = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1 pt-2">
               Dropoff Date and Time
             </label>
-            <input type="datetime-local" className="input"
+            <input type="datetime-local" className="input dark:bg-gray-800 dark:text-white w-full"
               name="dropoffDateTime"
               value={formData.dropoffDateTime}
               onChange={handleChange}
@@ -98,9 +98,12 @@ const BookingForm = () => {
             />
           </div>
           <div className="col-span-full flex justify-center mt-4 "  >
-            <button type='submit' className="btn btn-circle border-2 bg-accent text-lg w-16 h-16 p-4 hover:bg-cyan-500 hover:text-white transition-colors duration-300">
-              GO
-            </button>
+            <button
+            type="submit"
+            className="px-8 py-3 text-white font-semibold rounded-full shadow-lg transition duration-300 custom-gradient hover:brightness-110 active:scale-95"
+          >
+            Go
+          </button>
 
 
           </div>

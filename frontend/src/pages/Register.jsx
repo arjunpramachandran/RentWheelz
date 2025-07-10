@@ -114,10 +114,10 @@ const Register = ({ role }) => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-100 to-cyan-100 p-4">
+    <div className="dark:bg-gradient-to-br dark:from-green-700 dark:to-cyan-700 min-h-screen flex items-center justify-center bg-gradient-to-b from-green-100 to-cyan-100 p-4">
 
-      <div className="max-w-3xl  w-full bg-white shadow-md rounded-xl p-8">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">Create an Account</h2>
+      <div className="max-w-3xl  w-full bg-white dark:bg-slate-800 dark:text-indigo-200 shadow-md rounded-xl p-8">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-cyan-300">Create an Account</h2>
         <div className="space-y-4">
           <form onSubmit={formik.handleSubmit} className="space-y-4 ">
             <div className='md:flex gap-4'>
@@ -126,7 +126,7 @@ const Register = ({ role }) => {
                   <label className="block text-sm font-medium ">Name</label>
                   <input
                     name="name"
-                    className="input bg-gray-100"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
@@ -142,7 +142,7 @@ const Register = ({ role }) => {
                   <input
                     name="email"
                     type="email"
-                    className="input bg-gray-100"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.email}
@@ -158,7 +158,7 @@ const Register = ({ role }) => {
                   <input
                     name="password"
                     type="password"
-                    className="input bg-gray-100"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.password}
@@ -174,7 +174,7 @@ const Register = ({ role }) => {
                   <input
                     name="phone"
                     type="tel"
-                    className="input bg-gray-100"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.phone}
@@ -188,7 +188,7 @@ const Register = ({ role }) => {
                   <label className="block text-sm font-medium">License Number</label>
                   <input
                     name="licenseNumber"
-                    className="input bg-gray-100"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.licenseNumber}
@@ -202,7 +202,7 @@ const Register = ({ role }) => {
                   <label className="block text-sm font-medium">Address Proof ID</label>
                   <input
                     name="addressProofId"
-                    className="input bg-gray-100"
+                    className="input bg-gray-100 dark:bg-slate-700 dark:text-white"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.addressProofId}
@@ -226,7 +226,7 @@ const Register = ({ role }) => {
                     onChange={(e) => handleFileChange(e, 'profilepic')}
                     className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0 file:text-sm file:font-semibold
-                   file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+                   file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100  dark:text-white"
                   />
                   {profilePreview && (
                     <img
@@ -247,7 +247,7 @@ const Register = ({ role }) => {
                     onChange={(e) => handleFileChange(e, 'addressProof')}
                     className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0 file:text-sm file:font-semibold
-                   file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+                   file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:text-white"
                   />
                   {addressPreview && (
                     <img
@@ -270,7 +270,7 @@ const Register = ({ role }) => {
                     onChange={(e) => handleFileChange(e, 'licenseProof')}
                     className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0 file:text-sm file:font-semibold
-                   file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+                   file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 dark:text-white"
                   />
                   {licensePreview && (
                     <img

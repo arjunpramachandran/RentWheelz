@@ -34,7 +34,7 @@ const getHostStats = async (req, res) => {
     const totalBookings = await Booking.countDocuments({ vehicleId: { $in: vehicleIds } });
 
     const earningsResult = await Booking.aggregate([
-      { $match: { vehicleId: { $in: vehicleIds } } },
+      { $match: { vehicleId: { $in: vehicleIds } ,status: 'completed'} },
       { $group: { _id: null, total: { $sum: '$totalBill' } } }
     ]);
     console.log(earningsResult);

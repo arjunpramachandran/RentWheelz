@@ -54,7 +54,7 @@ const HostOrders = () => {
     if (loading) return <div className="p-8 text-center">Loading...</div>;
 
     return (
-        <div className="p-6">
+        <div className="p-6 dark:bg-gray-900 bg-gray-50 min-h-screen">
             <h2 className="text-3xl font-bold mb-6">My Orders</h2>
 
             {/* Filters */}
@@ -80,8 +80,8 @@ const HostOrders = () => {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto bg-white rounded-lg shadow">
-                <table className="min-w-full text-sm text-left">
+            <div className="overflow-x-auto bg-white rounded-lg shadow dark:bg-gray-800 ">
+                <table className="max-w-full text-sm text-left">
                     <thead className="bg-gray-100 text-gray-700">
                         <tr>
                             <th className="py-3 px-4">Vehicle</th>
@@ -109,13 +109,13 @@ const HostOrders = () => {
                                 const paymentStatus = b.paymentId ? 'Paid' : 'Unpaid';
 
                                 return (
-                                    <tr key={b._id} className="border-b hover:bg-gray-50">
+                                    <tr key={b._id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-700">
                                         <td className="py-3 px-4">{b.vehicleId?.brand} {b.vehicleId?.model}</td>
                                         <td className="py-3 px-4">{b.userId?.name}</td>
                                         <td className="py-3 px-4">
                                             {b.userId?.email}
                                             <br />
-                                            <span className="text-gray-600 text-xs">{b.userId?.phone}</span>
+                                            <span className="text-gray-600 text-xs dark:text-lime-200">{b.userId?.phone}</span>
                                         </td>
                                         <td className="py-3 px-4">{pickup}</td>
                                         <td className="py-3 px-4">{dropoff}</td>

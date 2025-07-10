@@ -103,7 +103,7 @@ const links = [
   { name: 'My Vehicles', path: '/host/my-vehicle' },
   { name: 'Add Vehicle', path: '/host/add-vehicle' },
   { name: 'Orders', path: '/host/myOrders' },
-  { name: 'Payments', path: '/reviews' },
+  
 ];
 
 const SidebarHost = () => {
