@@ -11,8 +11,7 @@ import { FaSmile, FaSadTear } from "react-icons/fa";
 import ModalDialog from '../../components/Modal';
 import BookingReviewModal from '@/components/BookingReviewModal';
 import { set } from 'date-fns';
-import { status } from 'init';
-
+import React from 'react';
 
 const VehicleBooking = () => {
     const { id } = useParams();
