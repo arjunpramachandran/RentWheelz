@@ -11,6 +11,7 @@ import { FaSmile, FaSadTear } from "react-icons/fa";
 import ModalDialog from '../../components/Modal';
 import BookingReviewModal from '@/components/BookingReviewModal';
 import { set } from 'date-fns';
+import { status } from 'init';
 
 
 const VehicleBooking = () => {
@@ -23,6 +24,7 @@ const VehicleBooking = () => {
     const [totalCost, setTotalCost] = useState(0)
     const [booking, setBooking] = useState();
     const [showPaymentReview, setShowPaymentReview] = useState(false);
+    
     const [bookingReviewData, setBookingReviewData] = useState({
       pickupLocation: '',
       pickupDateTime: '',
@@ -174,6 +176,15 @@ const VehicleBooking = () => {
 
         }
     }
+    // const addPayment = async (paymentData) => {
+    //     try {
+    //         const res = await api.post('/user/addPayment', paymentData, { withCredentials: true });
+    //         return res.data;
+    //     } catch (error) {
+    //         console.error('Error adding payment:', error?.response?.data || error.message);
+    //         throw error;
+    //     }
+    // };
 
     const getCurrentDateTime = () => {
         const now = new Date();
@@ -203,7 +214,7 @@ const VehicleBooking = () => {
 
     const updateBooking = async (status, paymentId) => {
         const query = new URLSearchParams(window.location.search);
-        const bookingId = query.get('bookingId')
+        let bookingId = query.get('bookingId')
         if (!bookingId) return console.warn("No bookingId to update");
         try {
             const res = await api.patch(`/user/updateBookingStatus/${bookingId}`, { status, paymentId }, {
@@ -237,6 +248,16 @@ const VehicleBooking = () => {
                         description: 'Your booking was successful. Redirecting to Dashboard...',
 
                     });
+                    // const paymentData = {
+                    //     bookingId: booking?._id ,
+                    //     userId: booking?.userId,
+                    //     hostId: booking?.hostId,
+                    //     amount: res.data?.amount_total / 100, // Convert to rupees
+                    //     paymentMethod: 'card',
+                    //     status: isSuccess ? 'success' : 'failed',
+                    //     transactionId: paymentId
+                    // };
+                    // await addPayment(paymentData);
                     setShowModal(true);
                 } else if (isCanceled) {
                     setModalContent({

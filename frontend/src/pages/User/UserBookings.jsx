@@ -1,36 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { useNavigate } from 'react-router-dom';
 import { savedBooking } from '../../app/features/user/bookingSlice';
 import Vehicles from '../Vehicles';
 
 const UserBooking = () => {
   const bookingData = useSelector((state) => state.booking.bookingData);
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  console.log(bookingData);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [formData, setFormData] = useState(bookingData)
+  const [formData, setFormData] = useState(bookingData || {});
 
-  
-  // const [vehicles, setVehicles] = useState([])
-  // const [filteredVehicles, setFilteredVehicles] = useState([])
-  // const [filters, setFilters] = useState({
-  //   type: '',
-  //   fuel: '',
-  //   transmission: ''
-  // })
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-
+  // Get current time for minimum dateTime
   const getCurrentDateTime = () => {
     const now = new Date();
     const offset = now.getTimezoneOffset();
@@ -39,66 +20,78 @@ const UserBooking = () => {
   };
 
   const minDateTime = getCurrentDateTime();
-  useEffect(()=>{
-     dispatch(savedBooking(formData));
-  },[]);
-  
+
+  // Update Redux when formData changes
+  useEffect(() => {
+    dispatch(savedBooking(formData));
+  }, [formData, dispatch]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
-    <>
-
-      <div className="  border-double border-2   z-10  shadow-2xl relative border-cyan-300 p-4 rounded-2xl ">
-        <form  className=' grid grid-cols-1  md:grid-cols-2 xl:grid-cols-3 items-center   gap-4' >
-          <div className='w-64' >
-            <label className=" block text-sm font-medium text-gray-700 mb-2">
+    <div className="px-4 py-6 max-w-6xl mx-auto">
+      {/* Booking Form */}
+      <div className="bg-white dark:bg-gray-800 border border-cyan-300 shadow-xl rounded-2xl p-6 mb-8">
+        <form className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {/* Pickup Location */}
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">
               Pickup Location
             </label>
             <input
               type="text"
-              className=" w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              placeholder={formData.pickupLocation ? formData.pickupLocation : "Enter pickup location"}
               name="pickupLocation"
-              value={formData.pickupLocation}
-              required
+              value={formData.pickupLocation || ''}
               onChange={handleChange}
+              placeholder="Enter pickup location"
+              required
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
-          
-          <div className='w-64'>
-            <label className=" block text-sm font-medium pt-2 text-gray-700 mb-1">
-              Pickup Date and Time
+
+          {/* Pickup Date & Time */}
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">
+              Pickup Date & Time
             </label>
-            <input type="datetime-local" className="w-full input"
+            <input
+              type="datetime-local"
               name="pickupDateTime"
-              placeholder={formData.pickupDateTime ? formData.pickupDateTime : ''}
-              value={formData.pickupDateTime}
-              required
+              value={formData.pickupDateTime || ''}
               onChange={handleChange}
               min={minDateTime}
-
+              required
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
-          <div className='w-64'>
-            <label className="block text-sm font-medium text-gray-700 mb-1 pt-2">
-              Dropoff Date and Time
+
+          {/* Dropoff Date & Time */}
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">
+              Dropoff Date & Time
             </label>
-            <input type="datetime-local" className="input"
+            <input
+              type="datetime-local"
               name="dropoffDateTime"
-              value={formData.dropoffDateTime}
+              value={formData.dropoffDateTime || ''}
               onChange={handleChange}
               min={formData.pickupDateTime || minDateTime}
               required
+              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
-
         </form>
-
       </div>
-    <Vehicles/>
 
-
-    </>
-
+      {/* Vehicle List */}
+      <Vehicles />
+    </div>
   );
 };
 

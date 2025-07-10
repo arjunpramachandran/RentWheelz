@@ -104,14 +104,23 @@ const AddVehicle = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow rounded-lg">
-            <h2 className="text-2xl font-bold mb-4 ">Add Vehicle</h2>
+        <div className="max-w-3xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-white shadow rounded-lg transition-colors duration-300">
+            <h2 className="text-2xl font-bold mb-4">Add Vehicle</h2>
 
-            <form onSubmit={formik.handleSubmit} encType="multipart/form-data" className="space-y-4 font-Montserrat text-sm font-medium">
+            <form
+                onSubmit={formik.handleSubmit}
+                encType="multipart/form-data"
+                className="space-y-4 font-Montserrat text-sm font-medium"
+            >
                 {/* Type */}
                 <div>
                     <label>Type</label>
-                    <select name="type" onChange={formik.handleChange} value={formik.values.type} className="w-full border border-gray-300 p-2 rounded-xl">
+                    <select
+                        name="type"
+                        onChange={formik.handleChange}
+                        value={formik.values.type}
+                        className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                    >
                         <option value="">Select</option>
                         <option value="car">Car</option>
                         <option value="bike">Bike</option>
@@ -122,11 +131,23 @@ const AddVehicle = () => {
                 <div className="flex gap-4">
                     <div className="flex-1">
                         <label>Brand</label>
-                        <input type="text" name="brand" onChange={formik.handleChange} value={formik.values.brand} className="w-full border border-gray-300 p-2 rounded-xl" />
+                        <input
+                            type="text"
+                            name="brand"
+                            onChange={formik.handleChange}
+                            value={formik.values.brand}
+                            className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                        />
                     </div>
                     <div className="flex-1">
                         <label>Model</label>
-                        <input type="text" name="model" onChange={formik.handleChange} value={formik.values.model} className="w-full border border-gray-300 p-2 rounded-xl" />
+                        <input
+                            type="text"
+                            name="model"
+                            onChange={formik.handleChange}
+                            value={formik.values.model}
+                            className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                        />
                     </div>
                 </div>
 
@@ -134,11 +155,23 @@ const AddVehicle = () => {
                 <div className="flex gap-4">
                     <div className="flex-1">
                         <label>Year</label>
-                        <input type="number" name="year" onChange={formik.handleChange} value={formik.values.year} className="w-full border border-gray-300 p-2 rounded-xl" />
+                        <input
+                            type="number"
+                            name="year"
+                            onChange={formik.handleChange}
+                            value={formik.values.year}
+                            className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                        />
                     </div>
                     <div className="flex-1">
                         <label>Price per Day</label>
-                        <input type="number" name="pricePerDay" onChange={formik.handleChange} value={formik.values.pricePerDay} className="w-full border border-gray-300 p-2 rounded-xl" />
+                        <input
+                            type="number"
+                            name="pricePerDay"
+                            onChange={formik.handleChange}
+                            value={formik.values.pricePerDay}
+                            className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                        />
                     </div>
                 </div>
 
@@ -146,7 +179,12 @@ const AddVehicle = () => {
                 <div className="flex gap-4">
                     <div className="flex-1">
                         <label>Fuel</label>
-                        <select name="fuel" onChange={formik.handleChange} value={formik.values.fuel} className="w-full border border-gray-300 p-2 rounded-xl">
+                        <select
+                            name="fuel"
+                            onChange={formik.handleChange}
+                            value={formik.values.fuel}
+                            className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                        >
                             <option value="">Select</option>
                             <option value="petrol">Petrol</option>
                             <option value="diesel">Diesel</option>
@@ -155,7 +193,12 @@ const AddVehicle = () => {
                     </div>
                     <div className="flex-1">
                         <label>Transmission</label>
-                        <select name="transmission" onChange={formik.handleChange} value={formik.values.transmission} className="w-full border border-gray-300 p-2 rounded-xl">
+                        <select
+                            name="transmission"
+                            onChange={formik.handleChange}
+                            value={formik.values.transmission}
+                            className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                        >
                             <option value="">Select</option>
                             <option value="manual">Manual</option>
                             <option value="automatic">Automatic</option>
@@ -163,20 +206,33 @@ const AddVehicle = () => {
                     </div>
                 </div>
 
-                {/* Registration */}
+                {/* Registration Number */}
                 <div>
                     <label>Registration Number</label>
-                    <input type="text" name="registrationNumber" onChange={formik.handleChange} value={formik.values.registrationNumber} className="w-full border border-gray-300 p-2 rounded-xl" />
+                    <input
+                        type="text"
+                        name="registrationNumber"
+                        onChange={formik.handleChange}
+                        value={formik.values.registrationNumber}
+                        className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                    />
                 </div>
 
-                {/* Coordinates */}
+                {/* Location & Driver */}
                 <div className="flex gap-4">
                     <div className="flex-1">
                         <label>Location</label>
-                        <input type="string" name="location" onChange={formik.handleChange} value={formik.values.location} className="w-full border border-gray-300 p-2 rounded-xl" />
+                        <input
+                            type="string"
+                            name="location"
+                            onChange={formik.handleChange}
+                            value={formik.values.location}
+                            className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                        />
                     </div>
-                    <div className="flex gap-4">
-                        <div className="flex-1">
+
+                    <div className="flex gap-4 flex-1">
+                        <div>
                             <label className="block mb-1">Driver Available</label>
                             <div className="flex gap-4 mt-1">
                                 <label className="flex items-center gap-2">
@@ -199,7 +255,7 @@ const AddVehicle = () => {
                                         checked={formik.values.driverAvailable === false}
                                         onChange={() => {
                                             formik.setFieldValue('driverAvailable', false);
-                                            formik.setFieldValue('rateOfDriver', 0); // reset driver rate
+                                            formik.setFieldValue('rateOfDriver', 0);
                                         }}
                                     />
                                     No
@@ -215,14 +271,14 @@ const AddVehicle = () => {
                                     name="rateOfDriver"
                                     onChange={formik.handleChange}
                                     value={formik.values.rateOfDriver}
-                                    className="w-full border border-gray-300 p-2 rounded-xl"
+                                    className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
                                 />
                             </div>
                         )}
                     </div>
-
-
                 </div>
+
+                {/* Description */}
                 <div>
                     <label>Description</label>
                     <textarea
@@ -230,34 +286,53 @@ const AddVehicle = () => {
                         rows="4"
                         onChange={formik.handleChange}
                         value={formik.values.description}
-                        className="w-full border border-gray-300 p-2 rounded-xl"
+                        className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
                         placeholder="Describe the vehicle, special features, etc."
                     />
                 </div>
 
-                {/* Images */}
+                {/* Image Upload */}
                 <div>
                     <label>Vehicle Images</label>
-                    <input type="file" multiple onChange={handleImageChange} className="w-full border border-gray-300 p-2 rounded-xl" />
+                    <input
+                        type="file"
+                        multiple
+                        onChange={handleImageChange}
+                        className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-2 rounded-xl"
+                    />
                     <div className="flex gap-2 mt-2 flex-wrap">
                         {imagePreviews.map((src, idx) => (
-                            <img key={idx} src={src} alt="preview" className="w-24 h-24 object-cover rounded" />
+                            <img
+                                key={idx}
+                                src={src}
+                                alt="preview"
+                                className="w-24 h-24 object-cover rounded border dark:border-gray-700"
+                            />
                         ))}
                     </div>
                 </div>
 
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                {/* Submit Button */}
+                <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                >
                     Submit
                 </button>
             </form>
+
             {isModalOpen && (
                 <ModalDialog
-                    title="Vehicle Updated"
-                    description="Your vehicle has been successfully updated."
-                    onClose={() => { setIsModalOpen(false); navigate('/host/dashboard') }}
+                    title="Vehicle Added Successfully"
+                    description={`Your vehicle ${formik.values.brand} ${formik.values.model} has been successfully added.`}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        navigate('/host/dashboard');
+                    }}
                 />
             )}
         </div>
+
     );
 };
 

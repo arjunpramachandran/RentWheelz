@@ -4,65 +4,59 @@ import * as Yup from 'yup';
 import { FaUser, FaLock } from 'react-icons/fa';
 import { api } from '../../config/axiosinstance';
 import { Link, useNavigate } from 'react-router-dom';
-
-
-import { useSelector, useDispatch } from 'react-redux'
-import { saveUser, logoutUser, updateUser } from '../../app/features/user/userSlice'
+import { useSelector, useDispatch } from 'react-redux';
+import { saveUser } from '../../app/features/user/userSlice';
 
 const LoginHost = () => {
   const [error, setError] = useState(null);
-
-  const dispatch = useDispatch()
-
-  const nav = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const postData = async (values) => {
     try {
-      const response = await api({
-        method: 'POST',
-        url: '/user/login',
-        data: values,
-      });
+      const response = await api.post('/user/login', values);
+      const { userObject, token } = response?.data;
 
-      const userData = response?.data?.userObject;
-      const token = response?.data?.token;
-     
-      
-      if (token) {
-        localStorage.setItem('token', token);
+      if (token) localStorage.setItem('token', token);
+
+      dispatch(saveUser(userObject));
+
+      if (userObject.role === 'host') {
+        navigate('/host/dashboard');
+      } else if (userObject.role === 'admin') {
+        navigate('/admin/adminDashboard');
+      } else {
+        navigate('/user/userDashboard');
       }
-
-      dispatch(saveUser(userData));
-      nav(userData.role === 'host' ? '/host/dashboard' : userData.role === 'admin' ? '/admin/adminDashboard' : '/user/userDashboard');
-    } catch (error) {
-      console.log('Error during login:', error);
-      setError(error?.response?.data?.message || 'An error occurred during login');
+    } catch (err) {
+      console.log('Login Error:', err);
+      setError(err?.response?.data?.message || 'Login failed. Try again.');
     }
-  }
+  };
+
   const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
+    initialValues: { email: '', password: '' },
     validationSchema: Yup.object({
-      email: Yup.string().email('Invalid email address').required('Email is required'),
-      password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+      email: Yup.string().email('Invalid email').required('Email is required'),
+      password: Yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
     }),
-    onSubmit: (values) => {
-      postData(values);
-    },
+    onSubmit: postData,
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-cyan-100 to-green-100 px-4">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-xl p-8">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-cyan-100 to-green-100 dark:from-gray-900 dark:to-gray-800 px-4">
+      <div className="max-w-md w-full bg-white dark:bg-gray-900 shadow-lg rounded-xl p-8">
+        <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6">
+          Login to Your Account
+        </h2>
 
-        <form className="space-y-5" onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} className="space-y-5">
           {/* Email */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
-            <div className={`flex items-center border rounded-md p-2 ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'}`}>
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Email
+            </label>
+            <div className={`flex items-center border rounded-md p-2 ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}>
               <FaUser className="text-gray-400 mr-2" />
               <input
                 name="email"
@@ -71,7 +65,7 @@ const LoginHost = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
-                className="w-full focus:outline-none"
+                className="w-full bg-transparent focus:outline-none text-gray-800 dark:text-gray-100"
               />
             </div>
             {formik.touched.email && formik.errors.email && (
@@ -81,8 +75,10 @@ const LoginHost = () => {
 
           {/* Password */}
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Password</label>
-            <div className={`flex items-center border rounded-md p-2 ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300'}`}>
+            <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Password
+            </label>
+            <div className={`flex items-center border rounded-md p-2 ${formik.touched.password && formik.errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}>
               <FaLock className="text-gray-400 mr-2" />
               <input
                 name="password"
@@ -91,7 +87,7 @@ const LoginHost = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.password}
-                className="w-full focus:outline-none"
+                className="w-full bg-transparent focus:outline-none text-gray-800 dark:text-gray-100"
               />
             </div>
             {formik.touched.password && formik.errors.password && (
@@ -100,16 +96,18 @@ const LoginHost = () => {
             {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           </div>
 
-          {/* Options */}
-          <div className="flex justify-between items-center text-sm text-gray-600">
+          {/* Remember Me & Forgot */}
+          <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
             <label className="flex items-center">
-              <input type="checkbox" className="mr-1" />
+              <input type="checkbox" className="mr-2" />
               Remember me
             </label>
-            <a href="#" className="text-cyan-600 hover:underline">Forgot password?</a>
+            <a href="#" className="text-cyan-600 dark:text-cyan-400 hover:underline">
+              Forgot password?
+            </a>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
             className="w-full bg-cyan-600 text-white py-2 rounded-md hover:bg-cyan-700 transition"
@@ -118,8 +116,12 @@ const LoginHost = () => {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Don’t have an account? <Link to='/host/register' className="text-cyan-600 hover:underline">Sign up as Host</Link>
+        {/* Sign Up Link */}
+        <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
+          Don’t have an account?{' '}
+          <Link to="/host/register" className="text-cyan-600 dark:text-cyan-400 hover:underline">
+            Sign up as Host
+          </Link>
         </p>
       </div>
     </div>

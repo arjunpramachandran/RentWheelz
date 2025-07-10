@@ -36,7 +36,7 @@ const Footer = () => {
           </div>
 
           <div className="flex-1 min-w-[200px] flex flex-col items-center text-center">
-            <img src="./Logo-New-Trans.png" className="w-20 h-auto " />
+            <img src="../Logo-New-Trans.png" className="w-20 h-auto " />
             <p>
               RentWheelz Ltd. <br />
               1234 Kerala Street, Suite 5678 <br />

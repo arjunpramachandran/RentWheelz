@@ -1,4 +1,3 @@
-
 import React from 'react';
 import CouponCard from '../../components/user/CoupenCard';
 import toast from 'react-hot-toast';
@@ -23,14 +22,16 @@ const coupons = [
 
 const UserCoupons = () => {
   const handleJoin = (code) => {
-    // Optional: await api.post('/subscribe-coupon', { code });
+    // Optional: Call your API here if needed
     toast.success(`Coupon "${code}" activated!`);
   };
 
   return (
-    <div className="p-4 md:p-8 bg-slate-100 min-h-screen">
-      <h2 className="text-2xl font-semibold text-slate-800 mb-6">Available Coupons</h2>
-      <div className="flex flex-wrap gap-6 justify-center">
+    <div className="p-4 md:p-8 bg-slate-100 dark:bg-gray-900 rounded-xl shadow-md mt-8">
+      <h2 className="text-3xl font-bold text-center text-slate-800 dark:text-white mb-6">
+        Available Coupons
+      </h2>
+      <div className="flex flex-wrap justify-center gap-6">
         {coupons.map((coupon) => (
           <CouponCard
             key={coupon.code}
